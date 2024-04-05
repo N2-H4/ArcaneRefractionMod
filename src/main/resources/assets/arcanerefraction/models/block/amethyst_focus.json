@@ -2,6 +2,6 @@
     "parent": "minecraft:block/cube_all",
     "textures":
     {
-        "all": "arcanerefraction:block/example_block"
+        "all": "arcanerefraction:block/amethyst_focus"
     }
 }

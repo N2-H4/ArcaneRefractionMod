@@ -1,20 +1,18 @@
-package com.example.examplemod.Block;
+package com.N2H4.arcanerefraction.Block;
 
-import com.example.examplemod.BlockEntity.TestBlockEntity;
+import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 
 
 public class DispersiveAmethysyBlock extends HalfTransparentBlock /*implements EntityBlock*/
 {
-    TestBlockEntity master;
+    AmethystFocusEntity master;
     private static boolean never(BlockState p_50806_, BlockGetter p_50807_, BlockPos p_50808_) {
         return false;
     }
@@ -35,7 +33,7 @@ public class DispersiveAmethysyBlock extends HalfTransparentBlock /*implements E
         super.destroy(pLevel, pPos, pState);
     }
 
-    public void setMaster(TestBlockEntity m)
+    public void setMaster(AmethystFocusEntity m)
     {
         master=m;
     }

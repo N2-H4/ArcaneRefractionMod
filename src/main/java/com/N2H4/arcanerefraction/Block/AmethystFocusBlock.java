@@ -1,4 +1,4 @@
-package com.example.examplemod.Block;
+package com.N2H4.arcanerefraction.Block;
 
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HalfTransparentBlock;
@@ -16,12 +16,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import com.example.examplemod.BlockEntity.TestBlockEntity;
+
+import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-public class ExampleBlock extends HalfTransparentBlock implements EntityBlock
+public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBlock
 {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
@@ -29,9 +31,9 @@ public class ExampleBlock extends HalfTransparentBlock implements EntityBlock
         return false;
     }
 
-    public ExampleBlock() 
+    public AmethystFocusBlock() 
     {
-        super(Blocks.AMETHYST_BLOCK.properties().noOcclusion().isViewBlocking(ExampleBlock::never));
+        super(Blocks.AMETHYST_BLOCK.properties().noOcclusion().isViewBlocking(AmethystFocusBlock::never));
         registerDefaultState(defaultBlockState().setValue(POWERED, false));
     }
 
@@ -49,7 +51,7 @@ public class ExampleBlock extends HalfTransparentBlock implements EntityBlock
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new TestBlockEntity(pos, state);
+        return new AmethystFocusEntity(pos, state);
     }
     
 
@@ -59,7 +61,7 @@ public class ExampleBlock extends HalfTransparentBlock implements EntityBlock
             return null;
         } else {
             return (lvl, pos, st, blockEntity) -> {
-                if (blockEntity instanceof TestBlockEntity be) {
+                if (blockEntity instanceof AmethystFocusEntity be) {
                     be.tickServer();
                 }
             };
@@ -84,7 +86,7 @@ public class ExampleBlock extends HalfTransparentBlock implements EntityBlock
         if (pHand == InteractionHand.MAIN_HAND)
         {
             BlockEntity tile = pLevel.getBlockEntity(pPos);
-            ((TestBlockEntity)tile).interact();
+            ((AmethystFocusEntity)tile).interact();
             return InteractionResult.SUCCESS;
         }
         //return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);

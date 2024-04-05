@@ -1,4 +1,6 @@
-package com.example.examplemod.BlockEntity;
+package com.N2H4.arcanerefraction.BlockEntity;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_ENTITY;
+import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.SugarCaneBlock;
@@ -8,12 +10,8 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import com.example.examplemod.Block.DispersiveAmethysyBlock;
 
-
-import static com.example.examplemod.ExampleMod.TEST;
-
-public class TestBlockEntity extends BlockEntity 
+public class AmethystFocusEntity extends BlockEntity 
 {
     int timer = 0;
     int size_timer = 0;
@@ -24,9 +22,9 @@ public class TestBlockEntity extends BlockEntity
     boolean sky_access = false;
     boolean is_redstone=false;
     
-    public TestBlockEntity(BlockPos pos, BlockState state) 
+    public AmethystFocusEntity(BlockPos pos, BlockState state) 
     {
-        super(TEST.get(), pos, state);
+        super(AMETHYST_FOCUS_ENTITY.get(), pos, state);
     }
 
     public void tickServer() 
@@ -42,7 +40,6 @@ public class TestBlockEntity extends BlockEntity
                 timer = 0;
                 if(getBlockState().getValue(BlockStateProperties.POWERED))
                     System.out.println("IS POWERED!");
-                // only do this once per second
                 //hurtMobs();
             }
         }
@@ -66,11 +63,6 @@ public class TestBlockEntity extends BlockEntity
         {
             //open menu here
         }
-    }
-
-    public void change_redstone(boolean state)
-    {
-        is_redstone=state;
     }
 
     private void hurtMobs() 
