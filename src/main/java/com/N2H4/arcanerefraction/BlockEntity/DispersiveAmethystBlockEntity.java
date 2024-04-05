@@ -1,3 +1,4 @@
+package com.N2H4.arcanerefraction.BlockEntity;
 /*package com.example.examplemod.BlockEntity;
 
 import net.minecraft.core.BlockPos;

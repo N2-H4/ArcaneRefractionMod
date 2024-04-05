@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "blocks",
+    "pattern": [
+      "isi",
+      "gag",
+      "ngn"
+    ],
+    "key": {
+      "a": {
+        "item": "minecraft:amethyst_block"
+      },
+      "i": {
+        "item": "minecraft:blue_ice"
+      },
+      "s": {
+        "item": "minecraft:spyglass"
+      },
+      "g": {
+        "item": "minecraft:glow_ink_sac"
+      },
+      "n": {
+        "item": "minecraft:nautilus_shell"
+      }
+    },
+    "result": {
+      "item": "arcanerefraction:amethyst_focus",
+      "count": 1
+    }
+  }
+  

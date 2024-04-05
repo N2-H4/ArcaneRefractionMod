@@ -17,7 +17,6 @@ public class AmethystFocusEntity extends BlockEntity
     int size_timer = 0;
     boolean is_active = true;
     int lens_size = 0;
-    boolean time_to_update = false;
     boolean is_formed = false;
     boolean sky_access = false;
     boolean is_redstone=false;
@@ -32,10 +31,6 @@ public class AmethystFocusEntity extends BlockEntity
         if (!level.isClientSide() && is_active){
             timer++;
             size_timer++;
-            if(time_to_update)
-            {
-                time_to_update=false;
-            }
             if (timer > 100){
                 timer = 0;
                 if(getBlockState().getValue(BlockStateProperties.POWERED))
@@ -48,7 +43,6 @@ public class AmethystFocusEntity extends BlockEntity
     public void getUpdated()
     {
         is_formed=false;
-        time_to_update=true;
     }
 
     public void interact()
