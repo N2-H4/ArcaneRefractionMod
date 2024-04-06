@@ -1,4 +1,5 @@
 {
     "block.arcanerefraction.amethyst_focus" : "Amethyst Focus",
-    "block.arcanerefraction.dispersive_amethyst": "Dispersive Amethyst"
+    "block.arcanerefraction.dispersive_amethyst": "Dispersive Amethyst",
+    "container.arcanerefraction.amethyst_focus_menu": "Amethyst Focus"
 }

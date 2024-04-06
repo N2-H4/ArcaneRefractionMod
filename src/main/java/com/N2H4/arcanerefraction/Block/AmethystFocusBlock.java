@@ -7,8 +7,10 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -16,10 +18,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.item.BrushItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -83,17 +93,40 @@ public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBl
     {
         if (pLevel.isClientSide)
 			return InteractionResult.SUCCESS;
-        if (pHand == InteractionHand.MAIN_HAND)
+        if (pHand == InteractionHand.MAIN_HAND && pPlayer.isHolding(Items.BRUSH))
         {
             BlockEntity tile = pLevel.getBlockEntity(pPos);
             ((AmethystFocusEntity)tile).interact();
             return InteractionResult.SUCCESS;
         }
-        //return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         else
         {
-            return InteractionResult.PASS;
+            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+            if (blockentity instanceof AmethystFocusEntity && pPlayer instanceof ServerPlayer) 
+            {
+                pPlayer.openMenu((AmethystFocusEntity)blockentity,pPos);
+                return InteractionResult.SUCCESS;
+            }
         }
+
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public void onRemove(@Nonnull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+        if (!level.isClientSide()) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof AmethystFocusEntity blockEntity) {
+                ItemStackHandler inventory = blockEntity.getInventory();
+                for (int index = 0; index < inventory.getSlots(); index++) {
+                    ItemStack stack = inventory.getStackInSlot(index);
+                    var entity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
+                    level.addFreshEntity(entity);
+                }
+            }
+        }
+
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override

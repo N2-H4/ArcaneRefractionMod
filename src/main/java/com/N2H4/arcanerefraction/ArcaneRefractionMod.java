@@ -3,14 +3,21 @@ package com.N2H4.arcanerefraction;
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import com.N2H4.arcanerefraction.Block.AmethystFocusBlock;
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
+import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -23,7 +30,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-//import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -39,17 +46,16 @@ public class ArcaneRefractionMod
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
-
+    public static final DeferredRegister<MenuType<?>> MENUS=DeferredRegister.create(BuiltInRegistries.MENU, MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, MODID);
-
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-
     public static final DeferredBlock<Block> AMETHYST_FOCUS_BLOCK = BLOCKS.register("amethyst_focus", AmethystFocusBlock::new);
     public static final DeferredBlock<Block> DISPERSIVE_AMETHYST_BLOCK = BLOCKS.register("dispersive_amethyst", DispersiveAmethysyBlock::new);
     public static final DeferredItem<BlockItem> AMETHYST_FOCUS_ITEM = ITEMS.registerSimpleBlockItem("amethyst_focus", AMETHYST_FOCUS_BLOCK);
     public static final DeferredItem<BlockItem> DISPERSIVE_AMETHYST_ITEM = ITEMS.registerSimpleBlockItem("dispersive_amethyst", DISPERSIVE_AMETHYST_BLOCK);
-
+    public static final DeferredHolder<MenuType<?>,MenuType<AmethystFocusMenu>> AMETHYST_FOCUS_MENU = MENUS.register("amethyst_focus_menu",() -> IMenuTypeExtension.create(AmethystFocusMenu::new));
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AmethystFocusEntity>> AMETHYST_FOCUS_ENTITY = BLOCK_ENTITY_REGISTER.register("amethyst_focus_entity",() -> BlockEntityType.Builder.of(AmethystFocusEntity::new, AMETHYST_FOCUS_BLOCK.get()).build(null));
+    public static final TagKey<Item> LENS_COATING_TAG = ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcanerefraction"))
@@ -67,7 +73,7 @@ public class ArcaneRefractionMod
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
-
+        MENUS.register(modEventBus);
         BLOCK_ENTITY_REGISTER.register(modEventBus);
 
         NeoForge.EVENT_BUS.register(this);

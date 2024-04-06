@@ -1,41 +1,123 @@
 package com.N2H4.arcanerefraction.BlockEntity;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_ENTITY;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
+import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
+
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.level.block.BeaconBlock;
+import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.common.util.Lazy;
 
-public class AmethystFocusEntity extends BlockEntity 
+
+
+public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 {
-    int timer = 0;
-    int size_timer = 0;
-    boolean is_active = true;
+    int timer = 300;
+    int timer2 = 0;
+    boolean wokeUp = false;
     int lens_size = 0;
     boolean is_formed = false;
     boolean sky_access = false;
-    boolean is_redstone=false;
+    List<BlockPos> processed_positions;
+
+    private final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
+
+    private final ItemStackHandler inventory = new ItemStackHandler(27)
+    {
+        @Override
+        protected void onContentsChanged(int slot) 
+        {
+            super.onContentsChanged(slot);
+            AmethystFocusEntity.this.setChanged();
+        };
+    };
     
     public AmethystFocusEntity(BlockPos pos, BlockState state) 
     {
         super(AMETHYST_FOCUS_ENTITY.get(), pos, state);
+        processed_positions = new ArrayList<BlockPos>();
     }
 
     public void tickServer() 
     {
-        if (!level.isClientSide() && is_active){
+        if (!level.isClientSide() && is_formed)
+        {
             timer++;
-            size_timer++;
-            if (timer > 100){
+            timer2++;
+            if (timer > 20)
+            {
                 timer = 0;
-                if(getBlockState().getValue(BlockStateProperties.POWERED))
-                    System.out.println("IS POWERED!");
-                //hurtMobs();
+                checkSkyAccess();
+                scanUnder();
+            }
+            if(timer2>2 && sky_access)
+            {
+                timer2=0;
+                doEffect();
+            }
+        }
+    }
+
+    private void doEffect()
+    {
+        for (BlockPos pos : processed_positions) 
+        {
+            BlockState b=this.level.getBlockState(pos);
+            if (b.getBlock() instanceof SugarCaneBlock)
+            {
+                SugarCaneBlock s=(SugarCaneBlock)b.getBlock();
+                s.randomTick(b, (ServerLevel)this.level, pos, level.random);
+            }
+        }
+    }
+
+    private void scanUnder()
+    {
+        processed_positions.clear();
+        processed_positions.add(new BlockPos(worldPosition));
+        int size = lens_size != 5 ? lens_size : 6;
+        for(int i=-size;i<=size;i++)
+        {
+            for(int j=-size;j<=size;j++)
+            {
+                if(!(i==0 && j==0))
+                {
+                    BlockPos pos=worldPosition.offset(i,0,j);
+                    if(level.getBlockState(pos).getBlock() instanceof DispersiveAmethysyBlock)
+                    {
+                        for(int depth=1;depth<=10;depth++)
+                        {
+                            pos=worldPosition.offset(i,-depth,j);
+                            if(level.getBlockState(pos).getBlock()!=Blocks.AIR)
+                            {
+                                processed_positions.add(pos);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -52,10 +134,6 @@ public class AmethystFocusEntity extends BlockEntity
             lens_size=calcLensSize();
             checkSkyAccess();
             is_formed=true;
-        }
-        else
-        {
-            //open menu here
         }
     }
 
@@ -84,7 +162,61 @@ public class AmethystFocusEntity extends BlockEntity
         }
         
     }
-    
+
+    @Override
+    public void onLoad() 
+    {
+        super.onLoad();
+        wakeUpParts();
+    }
+
+    @Override
+    public void load(CompoundTag nbt) 
+    {
+        super.load(nbt);
+        CompoundTag data = nbt.getCompound(MODID);
+        this.inventory.deserializeNBT(data.getCompound("Inventory"));
+        this.is_formed=data.getBoolean("Formed");
+        this.lens_size=data.getInt("Size");
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag nbt) 
+    {
+        super.saveAdditional(nbt);
+        var data=new CompoundTag();
+        data.put("Inventory", this.inventory.serializeNBT());
+        data.putBoolean("Formed", this.is_formed);
+        data.putInt("Size", this.lens_size);
+        nbt.put(MODID, data);
+    }
+
+    public ItemStackHandler getInventory() {
+        return this.inventory;
+    }
+
+    public Lazy<ItemStackHandler> getOptional() {
+        return this.optional;
+    }
+
+    private void wakeUpParts()
+    {
+        int size = lens_size != 5 ? lens_size : 6;
+        for(int i=-size;i<=size;i++)
+        {
+            for(int j=-size;j<=size;j++)
+            {
+                if(!(i==0 && j==0))
+                {
+                    Block b=level.getBlockState(worldPosition.offset(i,0,j)).getBlock();
+                    if(b instanceof DispersiveAmethysyBlock)
+                        ((DispersiveAmethysyBlock)b).setMaster(this);
+                }
+            }
+        }
+
+    }
+
     private int calcLensSize()
     {
         int size=0;
@@ -208,6 +340,17 @@ public class AmethystFocusEntity extends BlockEntity
                 }
             }
         }
-        
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) 
+    {
+        return new AmethystFocusMenu(pContainerId, pPlayerInventory,this);
+    }
+
+    @Override
+    public Component getDisplayName() 
+    {
+        return Component.translatable("container.arcanerefraction.amethyst_focus_menu");
     }
 }
