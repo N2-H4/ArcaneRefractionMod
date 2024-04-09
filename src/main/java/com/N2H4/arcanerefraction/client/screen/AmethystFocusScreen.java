@@ -15,13 +15,15 @@ import org.jetbrains.annotations.NotNull;
 public class AmethystFocusScreen extends AbstractContainerScreen<AmethystFocusMenu>
 {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(MODID, "textures/gui/amethyst_focus.png");
+            new ResourceLocation(MODID, "textures/gui/amethyst_focus_gui.png");
 
     public AmethystFocusScreen(AmethystFocusMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
 
         this.imageWidth = 176;
-        this.imageHeight = 166;
+        this.imageHeight = 222;
+        this.inventoryLabelX=8;
+        this.inventoryLabelY=128;
     }
 
     @Override

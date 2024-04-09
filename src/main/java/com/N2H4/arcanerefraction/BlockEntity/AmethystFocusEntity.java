@@ -44,13 +44,18 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 
     private final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
 
-    private final ItemStackHandler inventory = new ItemStackHandler(27)
+    private final ItemStackHandler inventory = new ItemStackHandler(25)
     {
         @Override
         protected void onContentsChanged(int slot) 
         {
             super.onContentsChanged(slot);
             AmethystFocusEntity.this.setChanged();
+        };
+
+        public int getSlotLimit(int slot) 
+        {
+            return 1;
         };
     };
     

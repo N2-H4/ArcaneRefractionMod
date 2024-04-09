@@ -75,6 +75,7 @@ public class ArcaneRefractionMod
         CREATIVE_MODE_TABS.register(modEventBus);
         MENUS.register(modEventBus);
         BLOCK_ENTITY_REGISTER.register(modEventBus);
+        ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
 
         NeoForge.EVENT_BUS.register(this);
 
