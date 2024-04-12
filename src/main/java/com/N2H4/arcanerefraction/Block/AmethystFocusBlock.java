@@ -68,7 +68,11 @@ public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBl
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide) {
-            return null;
+                return (lvl, pos, st, blockEntity) -> {
+                    if (blockEntity instanceof AmethystFocusEntity be) {
+                        be.tickServer();
+                    }
+                };
         } else {
             return (lvl, pos, st, blockEntity) -> {
                 if (blockEntity instanceof AmethystFocusEntity be) {
@@ -92,7 +96,9 @@ public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBl
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) 
     {
         if (pLevel.isClientSide)
-			return InteractionResult.SUCCESS;
+        {
+            return InteractionResult.SUCCESS;
+        }
         if (pHand == InteractionHand.MAIN_HAND && pPlayer.isHolding(Items.BRUSH))
         {
             BlockEntity tile = pLevel.getBlockEntity(pPos);

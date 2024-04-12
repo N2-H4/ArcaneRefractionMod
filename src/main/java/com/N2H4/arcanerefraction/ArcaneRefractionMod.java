@@ -4,8 +4,11 @@ import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import com.N2H4.arcanerefraction.Block.AmethystFocusBlock;
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
+import com.N2H4.arcanerefraction.particle.RayParticle;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -56,6 +59,8 @@ public class ArcaneRefractionMod
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFocusMenu>> AMETHYST_FOCUS_MENU = MENUS.register("amethyst_focus_menu",() -> IMenuTypeExtension.create(AmethystFocusMenu::new));
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AmethystFocusEntity>> AMETHYST_FOCUS_ENTITY = BLOCK_ENTITY_REGISTER.register("amethyst_focus_entity",() -> BlockEntityType.Builder.of(AmethystFocusEntity::new, AMETHYST_FOCUS_BLOCK.get()).build(null));
     public static final TagKey<Item> LENS_COATING_TAG = ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES=DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, MODID);
+    public static final DeferredHolder<ParticleType<?>,ParticleType<SimpleParticleType>> RAY_PARTICLE=PARTICLE_TYPES.register("ray_particle", () -> new SimpleParticleType(true));
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcanerefraction"))
@@ -75,6 +80,7 @@ public class ArcaneRefractionMod
         CREATIVE_MODE_TABS.register(modEventBus);
         MENUS.register(modEventBus);
         BLOCK_ENTITY_REGISTER.register(modEventBus);
+        PARTICLE_TYPES.register(modEventBus);
         ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
 
         NeoForge.EVENT_BUS.register(this);

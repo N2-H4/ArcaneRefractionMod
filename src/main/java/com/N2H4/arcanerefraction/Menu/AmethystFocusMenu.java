@@ -30,7 +30,7 @@ public class AmethystFocusMenu extends AbstractContainerMenu
     public AmethystFocusMenu(int containerId, Inventory playerInv, FriendlyByteBuf additionalData) {
         this(containerId, playerInv, playerInv.player.level().getBlockEntity(additionalData.readBlockPos()));
     }
-    // Server
+    // Server Constructor
     public AmethystFocusMenu(int containerId, Inventory playerInv, BlockEntity blockEntity) {
         super(AMETHYST_FOCUS_MENU.get(), containerId);
         if(blockEntity instanceof AmethystFocusEntity be) {

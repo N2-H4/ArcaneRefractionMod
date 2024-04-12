@@ -1,33 +1,43 @@
 package com.N2H4.arcanerefraction.BlockEntity;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_ENTITY;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.DISPERSIVE_AMETHYST_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.RAY_PARTICLE;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.N2H4.arcanerefraction.Block.AmethystFocusBlock;
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
+import com.N2H4.arcanerefraction.particle.RayParticle;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.level.block.BeaconBlock;
-import net.minecraft.world.level.block.entity.BeaconBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.util.Lazy;
 
 
@@ -36,6 +46,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 {
     int timer = 300;
     int timer2 = 0;
+    int ray_cooldown=120;
     boolean wokeUp = false;
     int lens_size = 0;
     boolean is_formed = false;
@@ -43,7 +54,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     List<BlockPos> processed_positions;
 
     private final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
-
+    
     private final ItemStackHandler inventory = new ItemStackHandler(25)
     {
         @Override
@@ -67,6 +78,16 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 
     public void tickServer() 
     {
+        if(level.isClientSide())
+        {
+            ray_cooldown++;
+            if(is_formed && sky_access && ray_cooldown>120)
+            {
+                ray_cooldown=0;
+                spawnParticles();
+            }
+            return;
+        }
         if (!level.isClientSide() && is_formed)
         {
             timer++;
@@ -76,25 +97,53 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 timer = 0;
                 checkSkyAccess();
                 scanUnder();
+                this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            if(timer2>2 && sky_access)
+            if(timer2>10 && sky_access)
             {
                 timer2=0;
-                doEffect();
+                grow();
             }
         }
     }
-
-    private void doEffect()
+    
+    public void spawnParticles()
     {
-        for (BlockPos pos : processed_positions) 
+        if(lens_size>=1)
         {
-            BlockState b=this.level.getBlockState(pos);
-            if (b.getBlock() instanceof SugarCaneBlock)
-            {
-                SugarCaneBlock s=(SugarCaneBlock)b.getBlock();
-                s.randomTick(b, (ServerLevel)this.level, pos, level.random);
-            }
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+        }
+        if(lens_size>=2)
+        {
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+1, worldPosition.getY(), worldPosition.getZ()+1, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-1, worldPosition.getY(), worldPosition.getZ()-1, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+1, worldPosition.getY(), worldPosition.getZ()-1, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-1, worldPosition.getY(), worldPosition.getZ()+1, 0, 0, 0);
+        }
+        if(lens_size>=3)
+        {
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
+        }
+        if(lens_size>=4)
+        {
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
+        }
+        if(lens_size==5)
+        {
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+3, worldPosition.getY(), worldPosition.getZ()+3, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-3, worldPosition.getY(), worldPosition.getZ()-3, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+3, worldPosition.getY(), worldPosition.getZ()-3, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-3, worldPosition.getY(), worldPosition.getZ()+3, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+5, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-5, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()+5, 0, 0, 0);
+            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()-5, 0, 0, 0);
         }
     }
 
@@ -107,22 +156,19 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         {
             for(int j=-size;j<=size;j++)
             {
-                if(!(i==0 && j==0))
+                BlockPos pos=worldPosition.offset(i,0,j);
+                if(level.getBlockState(pos).getBlock() == DISPERSIVE_AMETHYST_BLOCK.get() || level.getBlockState(pos).getBlock() == AMETHYST_FOCUS_BLOCK.get())
                 {
-                    BlockPos pos=worldPosition.offset(i,0,j);
-                    if(level.getBlockState(pos).getBlock() instanceof DispersiveAmethysyBlock)
+                    for(int depth=1;depth<=10;depth++)
                     {
-                        for(int depth=1;depth<=10;depth++)
+                        pos=worldPosition.offset(i,-depth,j);
+                        if(level.getBlockState(pos).getBlock()!=Blocks.AIR && level.getBlockState(pos).getBlock()!=DISPERSIVE_AMETHYST_BLOCK.get() && level.getBlockState(pos).getBlock()!=AMETHYST_FOCUS_BLOCK.get())
                         {
-                            pos=worldPosition.offset(i,-depth,j);
-                            if(level.getBlockState(pos).getBlock()!=Blocks.AIR)
-                            {
-                                processed_positions.add(pos);
-                                break;
-                            }
+                            processed_positions.add(pos);
+                            break;
                         }
                     }
-                }
+                } 
             }
         }
     }
@@ -134,10 +180,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 
     public void interact()
     {
-        if(!is_formed)
+        lens_size=calcLensSize();
+        checkSkyAccess();
+        if(!is_formed && lens_size>0 && sky_access)
         {
-            lens_size=calcLensSize();
-            checkSkyAccess();
             is_formed=true;
         }
     }
@@ -168,6 +214,28 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         
     }
 
+    @SuppressWarnings("deprecation")
+    private void grow()
+    {
+        for (BlockPos pos : processed_positions) 
+        {
+            BlockState bs=this.level.getBlockState(pos);
+            Block b=bs.getBlock();
+            if (isAllowedCrop(b) && (b instanceof IPlantable || b instanceof BonemealableBlock))
+            {
+                level.scheduleTick(pos, b, 1);
+		        b.randomTick(bs, (ServerLevel)level, pos, level.random);
+		        level.levelEvent(2005, pos, 1);
+
+            }
+        }
+    }
+
+    private boolean isAllowedCrop(Block b)
+    {
+        return b!=Blocks.GRASS_BLOCK && !(b instanceof DoublePlantBlock);
+    }
+
     @Override
     public void onLoad() 
     {
@@ -194,6 +262,41 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         data.putBoolean("Formed", this.is_formed);
         data.putInt("Size", this.lens_size);
         nbt.put(MODID, data);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() 
+    {
+        CompoundTag nbt=super.getUpdateTag();
+        var data=new CompoundTag();
+        data.putBoolean("Formed", this.is_formed);
+        data.putBoolean("Sky", this.sky_access);
+        data.putInt("Size", this.lens_size);
+        nbt.put(MODID, data);
+        return nbt;
+    }
+
+    @Override
+    public void handleUpdateTag(CompoundTag tag) 
+    {
+        CompoundTag data = tag.getCompound(MODID);
+        this.is_formed=data.getBoolean("Formed");
+        this.sky_access=data.getBoolean("Sky");
+        this.lens_size=data.getInt("Size");
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() 
+    {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        CompoundTag data = pkt.getTag().getCompound(MODID);
+        this.is_formed=data.getBoolean("Formed");
+        this.sky_access=data.getBoolean("Sky");
+        this.lens_size=data.getInt("Size");
     }
 
     public ItemStackHandler getInventory() {
