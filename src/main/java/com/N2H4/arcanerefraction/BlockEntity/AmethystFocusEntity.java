@@ -7,14 +7,14 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.RAY_PARTICLE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.N2H4.arcanerefraction.Block.AmethystFocusBlock;
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
-import com.N2H4.arcanerefraction.particle.RayParticle;
+import com.N2H4.arcanerefraction.Utils.CropHarvesting;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -23,14 +23,21 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.NaturalSpawner;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -39,8 +46,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.util.Lazy;
-
-
+import net.minecraft.world.entity.animal.Animal;
 
 public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 {
@@ -49,6 +55,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     int ray_cooldown=120;
     boolean wokeUp = false;
     int lens_size = 0;
+    int depth_range=10;
     boolean is_formed = false;
     boolean sky_access = false;
     List<BlockPos> processed_positions;
@@ -99,10 +106,11 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 scanUnder();
                 this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            if(timer2>10 && sky_access)
+            if(timer2>40 && sky_access)
             {
                 timer2=0;
-                grow();
+                //grow();
+                spawnPassive();
             }
         }
     }
@@ -150,7 +158,6 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     private void scanUnder()
     {
         processed_positions.clear();
-        processed_positions.add(new BlockPos(worldPosition));
         int size = lens_size != 5 ? lens_size : 6;
         for(int i=-size;i<=size;i++)
         {
@@ -159,7 +166,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 BlockPos pos=worldPosition.offset(i,0,j);
                 if(level.getBlockState(pos).getBlock() == DISPERSIVE_AMETHYST_BLOCK.get() || level.getBlockState(pos).getBlock() == AMETHYST_FOCUS_BLOCK.get())
                 {
-                    for(int depth=1;depth<=10;depth++)
+                    for(int depth=1;depth<=depth_range;depth++)
                     {
                         pos=worldPosition.offset(i,-depth,j);
                         if(level.getBlockState(pos).getBlock()!=Blocks.AIR && level.getBlockState(pos).getBlock()!=DISPERSIVE_AMETHYST_BLOCK.get() && level.getBlockState(pos).getBlock()!=AMETHYST_FOCUS_BLOCK.get())
@@ -188,12 +195,12 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void hurtMobs() 
+    /*private void hurtMobs() 
     {
         Vec3 topCorner = this.worldPosition.offset(5, 5, 5).getCenter();
         Vec3 bottomCorner = this.worldPosition.offset(-5, -5, -5).getCenter();
         AABB box = new AABB(topCorner, bottomCorner);
-        /*Stream<BlockState> blockstates = this.level.getBlockStates(box);
+        Stream<BlockState> blockstates = this.level.getBlockStates(box);
         List<BlockState> list=new ArrayList<BlockState>();
         blockstates.forEach((x -> list.add(x)));
         for (BlockState target : list){
@@ -203,7 +210,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 //c.growCrops(this.level, this.worldPosition.offset(0,-3,0), target);
                 level.scheduleTick(worldPosition.offset(0,-1,0), target.getBlock(), 0);
             }
-        }*/
+        }
         BlockState b=this.level.getBlockState(worldPosition.offset(0,-2,0));
         if (b.getBlock() instanceof SugarCaneBlock)
         {
@@ -212,7 +219,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 s.randomTick(b, (ServerLevel)this.level, worldPosition.offset(0,-2,0), level.random);
         }
         
-    }
+    }*/
 
     @SuppressWarnings("deprecation")
     private void grow()
@@ -221,7 +228,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         {
             BlockState bs=this.level.getBlockState(pos);
             Block b=bs.getBlock();
-            if (isAllowedCrop(b) && (b instanceof IPlantable || b instanceof BonemealableBlock))
+            if (CropHarvesting.isAllowedCrop(b) && (b instanceof IPlantable || b instanceof BonemealableBlock))
             {
                 level.scheduleTick(pos, b, 1);
 		        b.randomTick(bs, (ServerLevel)level, pos, level.random);
@@ -231,9 +238,81 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private boolean isAllowedCrop(Block b)
+    private void harvestAndReplant()
     {
-        return b!=Blocks.GRASS_BLOCK && !(b instanceof DoublePlantBlock);
+        for (BlockPos pos : processed_positions) 
+        {
+            BlockState bs=this.level.getBlockState(pos);
+            CropHarvesting.harvestAndReplant(bs, level, pos);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void spawnHostile()
+    {
+        AABB areaToCheck = new AABB(worldPosition).inflate(lens_size, depth_range, lens_size);
+		int entityCount = level.getEntitiesOfClass(Mob.class, areaToCheck, entity -> entity != null && entity instanceof Enemy).size();
+        if(entityCount<3*lens_size)
+        {
+            for(int i=0;i<4; i++)
+            {
+                BlockPos pos = processed_positions.get(level.getRandom().nextInt(processed_positions.size()));
+                Biome biome = level.getBiome(pos).value();
+                List<SpawnerData> spawns = biome.getMobSettings().getMobs(MobCategory.MONSTER).unwrap();
+                if (!spawns.isEmpty())
+                {
+                    int indexSize = spawns.size();
+			        EntityType<?> type = spawns.get(level.getRandom().nextInt(indexSize)).type;
+                    if (type == null || !NaturalSpawner.isSpawnPositionOk(SpawnPlacements.getPlacementType(type), level, pos.above(), type))
+				        continue;
+
+                    Mob entity = (Mob) type.create(level);
+
+                    if (entity != null) {
+                        entity.setPos(pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
+                        if(level.noCollision(entity)) 
+                        {
+                            entity.finalizeSpawn((ServerLevel)level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null, null);
+                            level.addFreshEntity(entity);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void spawnPassive()
+    {
+        AABB areaToCheck = new AABB(worldPosition).inflate(lens_size, depth_range, lens_size);
+		int entityCount = level.getEntitiesOfClass(Mob.class, areaToCheck, entity -> entity != null && entity instanceof Animal).size();
+        if(entityCount<3*lens_size)
+        {
+            for(int i=0;i<4; i++)
+            {
+                BlockPos pos = processed_positions.get(level.getRandom().nextInt(processed_positions.size()));
+                Biome biome = level.getBiome(pos).value();
+                List<SpawnerData> spawns = biome.getMobSettings().getMobs(MobCategory.CREATURE).unwrap();
+                if (!spawns.isEmpty())
+                {
+                    int indexSize = spawns.size();
+			        EntityType<?> type = spawns.get(level.getRandom().nextInt(indexSize)).type;
+                    if (type == null || !NaturalSpawner.isSpawnPositionOk(SpawnPlacements.getPlacementType(type), level, pos.above(), type))
+				        continue;
+
+                    Mob entity = (Mob) type.create(level);
+
+                    if (entity != null) {
+                        entity.setPos(pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
+                        if(level.noCollision(entity)) 
+                        {
+                            entity.finalizeSpawn((ServerLevel)level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null, null);
+                            level.addFreshEntity(entity);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
