@@ -7,8 +7,6 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.RAY_PARTICLE;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
@@ -16,6 +14,7 @@ import com.N2H4.arcanerefraction.Utils.CropHarvesting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.data.models.blockstates.BlockStateGenerator;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -32,7 +31,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MobSpawnType;
@@ -110,7 +111,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             {
                 timer2=0;
                 //grow();
-                spawnPassive();
+                freeze();
             }
         }
     }
@@ -311,6 +312,63 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void hurt()
+    {
+        int size = lens_size != 5 ? lens_size : 6;
+        Vec3 topCorner = this.worldPosition.offset(size, size, size).getCenter();
+        Vec3 bottomCorner = this.worldPosition.offset(-size, -size, -size).getCenter();
+        AABB box = new AABB(topCorner, bottomCorner);
+        List<Entity> entities =level.getEntities(null, box);
+        for (Entity entity : entities) 
+        {
+            if(entity instanceof LivingEntity)
+            {
+                ((LivingEntity)entity).hurt(level.damageSources().magic(), 8.0f);
+            }
+        }
+    }
+
+    private void heal()
+    {
+        int size = lens_size != 5 ? lens_size : 6;
+        Vec3 topCorner = this.worldPosition.offset(size, size, size).getCenter();
+        Vec3 bottomCorner = this.worldPosition.offset(-size, -size, -size).getCenter();
+        AABB box = new AABB(topCorner, bottomCorner);
+        List<Entity> entities =level.getEntities(null, box);
+        for (Entity entity : entities) 
+        {
+            if(entity instanceof LivingEntity)
+            {
+                ((LivingEntity)entity).heal(8.0f);
+            }
+        }
+    }
+
+    private void melt()
+    {
+        for (BlockPos pos : processed_positions) 
+        {
+            BlockState bs=this.level.getBlockState(pos);
+            if(bs.getBlock()==Blocks.COBBLESTONE)
+            {
+                level.setBlock(pos, Blocks.LAVA.defaultBlockState(), 2);
+            }
+        }
+
+    }
+
+    private void freeze()
+    {
+        for (BlockPos pos : processed_positions) 
+        {
+            BlockState bs=this.level.getBlockState(pos);
+            if(bs.getBlock()==Blocks.WATER)
+            {
+                level.setBlock(pos, level.getRandom().nextFloat()>0.5 ? Blocks.ICE.defaultBlockState() :  Blocks.SNOW_BLOCK.defaultBlockState() , 2);
             }
         }
     }
