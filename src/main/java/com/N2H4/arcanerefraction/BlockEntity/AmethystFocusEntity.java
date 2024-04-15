@@ -6,15 +6,17 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.RAY_PARTICLE;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.Utils.CropHarvesting;
+import com.N2H4.arcanerefraction.Utils.EntityLoot;
+import com.ibm.icu.impl.coll.Collation;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.data.models.blockstates.BlockStateGenerator;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -46,6 +48,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.minecraft.world.entity.animal.Animal;
 
@@ -111,7 +114,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             {
                 timer2=0;
                 //grow();
-                freeze();
+                spawnOres();
             }
         }
     }
@@ -319,10 +322,11 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     private void hurt()
     {
         int size = lens_size != 5 ? lens_size : 6;
-        Vec3 topCorner = this.worldPosition.offset(size, size, size).getCenter();
-        Vec3 bottomCorner = this.worldPosition.offset(-size, -size, -size).getCenter();
+        Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
+        Vec3 bottomCorner = this.worldPosition.offset(-size, -depth_range, -size).getCenter();
         AABB box = new AABB(topCorner, bottomCorner);
         List<Entity> entities =level.getEntities(null, box);
+        System.out.println(size);
         for (Entity entity : entities) 
         {
             if(entity instanceof LivingEntity)
@@ -335,8 +339,8 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     private void heal()
     {
         int size = lens_size != 5 ? lens_size : 6;
-        Vec3 topCorner = this.worldPosition.offset(size, size, size).getCenter();
-        Vec3 bottomCorner = this.worldPosition.offset(-size, -size, -size).getCenter();
+        Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
+        Vec3 bottomCorner = this.worldPosition.offset(-size, -depth_range, -size).getCenter();
         AABB box = new AABB(topCorner, bottomCorner);
         List<Entity> entities =level.getEntities(null, box);
         for (Entity entity : entities) 
@@ -369,6 +373,42 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             if(bs.getBlock()==Blocks.WATER)
             {
                 level.setBlock(pos, level.getRandom().nextFloat()>0.5 ? Blocks.ICE.defaultBlockState() :  Blocks.SNOW_BLOCK.defaultBlockState() , 2);
+            }
+        }
+    }
+
+    private void shedItems()
+    {
+        int size = lens_size != 5 ? lens_size : 6;
+        Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
+        Vec3 bottomCorner = this.worldPosition.offset(-size, -depth_range, -size).getCenter();
+        AABB box = new AABB(topCorner, bottomCorner);
+        List<Entity> entities =level.getEntities(null, box);
+        for (Entity entity : entities) 
+        {
+            if(entity instanceof Animal)
+            {
+                EntityLoot.dropLoot(level, (LivingEntity)entity);
+            }
+        }
+    }
+
+    private void spawnOres()
+    {
+        Collections.shuffle(processed_positions);
+        int transform_count=3*lens_size;
+        for (BlockPos pos : processed_positions) 
+        {
+            BlockState bs=this.level.getBlockState(pos);
+            if(bs.getBlock()==Blocks.COBBLESTONE)
+            {
+                //list form configuration
+                List<Block> ores=new ArrayList<Block>(List.of(Blocks.COAL_ORE,Blocks.IRON_ORE,Blocks.COPPER_ORE,Blocks.GOLD_ORE,Blocks.REDSTONE_ORE,Blocks.LAPIS_ORE,Blocks.EMERALD_ORE,Blocks.DIAMOND_ORE));
+                Block ore=ores.get(level.getRandom().nextInt(ores.size()));
+                level.setBlock(pos, ore.defaultBlockState(), 2);
+                transform_count--;
+                if(transform_count<=0) 
+                    return;
             }
         }
     }
