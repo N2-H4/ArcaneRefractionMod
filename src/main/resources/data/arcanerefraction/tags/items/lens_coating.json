@@ -1,7 +1,12 @@
 {
     "replace": false,
     "values": [
-      "minecraft:blue_ice",
-      "minecraft:dirt"
+      "arcanerefraction:honeycomb_coating",
+      "arcanerefraction:blackstone_coating",
+      "arcanerefraction:crying_obsidian_coating",
+      "arcanerefraction:froglight_coating",
+      "arcanerefraction:sculk_coating",
+      "arcanerefraction:fire_coral_coating",
+      "arcanerefraction:purpur_coating"
     ]
   }

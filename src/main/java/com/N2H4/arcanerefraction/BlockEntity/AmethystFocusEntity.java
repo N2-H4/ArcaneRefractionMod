@@ -48,7 +48,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.common.IPlantable;
-import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.minecraft.world.entity.animal.Animal;
 
@@ -113,8 +112,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             if(timer2>40 && sky_access)
             {
                 timer2=0;
-                //grow();
-                spawnOres();
+                grow();
             }
         }
     }
@@ -232,7 +230,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         {
             BlockState bs=this.level.getBlockState(pos);
             Block b=bs.getBlock();
-            if (CropHarvesting.isAllowedCrop(b) && (b instanceof IPlantable || b instanceof BonemealableBlock))
+            if (CropHarvesting.isAllowedCrop(b) && (b instanceof IPlantable || b instanceof BonemealableBlock) || b==Blocks.BUDDING_AMETHYST)
             {
                 level.scheduleTick(pos, b, 1);
 		        b.randomTick(bs, (ServerLevel)level, pos, level.random);
