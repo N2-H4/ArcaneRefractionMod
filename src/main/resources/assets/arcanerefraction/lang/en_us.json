@@ -1,8 +1,10 @@
 {
     "itemGroup.arcanerefraction": "Arcane Refraction",
     "block.arcanerefraction.amethyst_focus" : "Amethyst Focus",
+    "block.arcanerefraction.amethyst_filter" : "Amethyst Filter",
     "block.arcanerefraction.dispersive_amethyst": "Dispersive Amethyst",
     "container.arcanerefraction.amethyst_focus_menu": "",
+    "container.arcanerefraction.amethyst_filter_menu": "",
     "item.arcanerefraction.honeycomb_coating": "Honeycomb Coating",
     "item.arcanerefraction.blackstone_coating": "Blackstone Coating",
     "item.arcanerefraction.crying_obsidian_coating": "Crying Obsidian Coating",

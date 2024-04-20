@@ -1,8 +1,11 @@
 package com.N2H4.arcanerefraction;
 
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
+import com.N2H4.arcanerefraction.Block.AmethystFilterBlock;
 import com.N2H4.arcanerefraction.Block.AmethystFocusBlock;
+import com.N2H4.arcanerefraction.BlockEntity.AmethystFilterEntity;
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
+import com.N2H4.arcanerefraction.Menu.AmethystFilterMenu;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.particle.RayParticle;
 import com.mojang.logging.LogUtils;
@@ -54,8 +57,10 @@ public class ArcaneRefractionMod
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
     public static final DeferredBlock<Block> AMETHYST_FOCUS_BLOCK = BLOCKS.register("amethyst_focus", AmethystFocusBlock::new);
     public static final DeferredBlock<Block> DISPERSIVE_AMETHYST_BLOCK = BLOCKS.register("dispersive_amethyst", DispersiveAmethysyBlock::new);
+    public static final DeferredBlock<Block> AMETHYST_FILTER_BLOCK = BLOCKS.register("amethyst_filter", AmethystFilterBlock::new);
     public static final DeferredItem<BlockItem> AMETHYST_FOCUS_ITEM = ITEMS.registerSimpleBlockItem("amethyst_focus", AMETHYST_FOCUS_BLOCK);
     public static final DeferredItem<BlockItem> DISPERSIVE_AMETHYST_ITEM = ITEMS.registerSimpleBlockItem("dispersive_amethyst", DISPERSIVE_AMETHYST_BLOCK);
+    public static final DeferredItem<BlockItem> AMETHYST_FILTER_ITEM = ITEMS.registerSimpleBlockItem("amethyst_filter", AMETHYST_FILTER_BLOCK);
     public static final DeferredItem<Item> HONEYCOMB_COATING = ITEMS.registerSimpleItem("honeycomb_coating");
     public static final DeferredItem<Item> BLACKSTONE_COATING = ITEMS.registerSimpleItem("blackstone_coating");
     public static final DeferredItem<Item> CRYING_OBSIDIAN_COATING = ITEMS.registerSimpleItem("crying_obsidian_coating");
@@ -64,7 +69,9 @@ public class ArcaneRefractionMod
     public static final DeferredItem<Item> FIRE_CORAL_COATING = ITEMS.registerSimpleItem("fire_coral_coating");
     public static final DeferredItem<Item> PURPUR_COATING = ITEMS.registerSimpleItem("purpur_coating");
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFocusMenu>> AMETHYST_FOCUS_MENU = MENUS.register("amethyst_focus_menu",() -> IMenuTypeExtension.create(AmethystFocusMenu::new));
+    public static final DeferredHolder<MenuType<?>,MenuType<AmethystFilterMenu>> AMETHYST_FILTER_MENU = MENUS.register("amethyst_filter_menu",() -> IMenuTypeExtension.create(AmethystFilterMenu::new));
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AmethystFocusEntity>> AMETHYST_FOCUS_ENTITY = BLOCK_ENTITY_REGISTER.register("amethyst_focus_entity",() -> BlockEntityType.Builder.of(AmethystFocusEntity::new, AMETHYST_FOCUS_BLOCK.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AmethystFilterEntity>> AMETHYST_FILTER_ENTITY = BLOCK_ENTITY_REGISTER.register("amethyst_filter_entity",() -> BlockEntityType.Builder.of(AmethystFilterEntity::new, AMETHYST_FILTER_BLOCK.get()).build(null));
     public static final TagKey<Item> LENS_COATING_TAG = ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES=DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, MODID);
     public static final DeferredHolder<ParticleType<?>,ParticleType<SimpleParticleType>> RAY_PARTICLE=PARTICLE_TYPES.register("ray_particle", () -> new SimpleParticleType(true));
@@ -75,6 +82,7 @@ public class ArcaneRefractionMod
             .displayItems((parameters, output) -> {
                 output.accept(AMETHYST_FOCUS_ITEM.get());
                 output.accept(DISPERSIVE_AMETHYST_ITEM.get());
+                output.accept(AMETHYST_FILTER_ITEM.get());
                 output.accept(HONEYCOMB_COATING.get());
                 output.accept(BLACKSTONE_COATING.get());
                 output.accept(CRYING_OBSIDIAN_COATING.get());
