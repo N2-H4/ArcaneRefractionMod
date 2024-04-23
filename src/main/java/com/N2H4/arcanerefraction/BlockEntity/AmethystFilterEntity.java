@@ -1,6 +1,6 @@
 package com.N2H4.arcanerefraction.BlockEntity;
 
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_ENTITY;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_ENTITY;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 
 import com.N2H4.arcanerefraction.Menu.AmethystFilterMenu;
@@ -8,6 +8,9 @@ import com.N2H4.arcanerefraction.Menu.AmethystFilterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +24,7 @@ public class AmethystFilterEntity extends BlockEntity implements MenuProvider
 {
     private final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
 
-    private final ItemStackHandler inventory = new ItemStackHandler(25)
+    private final ItemStackHandler inventory = new ItemStackHandler(9)
     {
         @Override
         protected void onContentsChanged(int slot) 
@@ -38,7 +41,7 @@ public class AmethystFilterEntity extends BlockEntity implements MenuProvider
 
     public AmethystFilterEntity(BlockPos pos, BlockState state) 
     {
-        super(AMETHYST_FOCUS_ENTITY.get(), pos, state);
+        super(AMETHYST_FILTER_ENTITY.get(), pos, state);
     }
 
     @Override
@@ -62,6 +65,12 @@ public class AmethystFilterEntity extends BlockEntity implements MenuProvider
         var data=new CompoundTag();
         data.put("Inventory", this.inventory.serializeNBT());
         nbt.put(MODID, data);
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() 
+    {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override

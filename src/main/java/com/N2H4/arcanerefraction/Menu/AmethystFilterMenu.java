@@ -4,6 +4,7 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_BLOC
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_MENU;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFilterEntity;
 
@@ -11,16 +12,17 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
-public class AmethystFilterMenu extends AbstractContainerMenu 
-{
+public class AmethystFilterMenu extends AbstractContainerMenu {
 
     private final AmethystFilterEntity blockEntity;
     private final ContainerLevelAccess levelAccess;
@@ -29,10 +31,11 @@ public class AmethystFilterMenu extends AbstractContainerMenu
     public AmethystFilterMenu(int containerId, Inventory playerInv, FriendlyByteBuf additionalData) {
         this(containerId, playerInv, playerInv.player.level().getBlockEntity(additionalData.readBlockPos()));
     }
+
     // Server Constructor
     public AmethystFilterMenu(int containerId, Inventory playerInv, BlockEntity blockEntity) {
         super(AMETHYST_FILTER_MENU.get(), containerId);
-        if(blockEntity instanceof AmethystFilterEntity be) {
+        if (blockEntity instanceof AmethystFilterEntity be) {
             this.blockEntity = be;
         } else {
             throw new IllegalStateException("Incorrect block entity class (%s) passed into menu"
@@ -48,37 +51,16 @@ public class AmethystFilterMenu extends AbstractContainerMenu
 
     private void createBlockEntityInventory(AmethystFilterEntity be) {
 
-        ItemStackHandler inv=be.getOptional().get();
-        super.addSlot(new FocusSlot(inv,0,80,11));
-
-        super.addSlot(new FocusSlot(inv,1,62,34));
-        super.addSlot(new FocusSlot(inv,2,80,34));
-        super.addSlot(new FocusSlot(inv,3,98,34));
-
-        super.addSlot(new FocusSlot(inv,4,44,57));
-        super.addSlot(new FocusSlot(inv,5,62,57));
-        super.addSlot(new FocusSlot(inv,6,80,57));
-        super.addSlot(new FocusSlot(inv,7,98,57));
-        super.addSlot(new FocusSlot(inv,8,115,57));
-
-        super.addSlot(new FocusSlot(inv,9,26,79));
-        super.addSlot(new FocusSlot(inv,10,44,79));
-        super.addSlot(new FocusSlot(inv,11,62,79));
-        super.addSlot(new FocusSlot(inv,12,80,79));
-        super.addSlot(new FocusSlot(inv,13,98,79));
-        super.addSlot(new FocusSlot(inv,14,115,79));
-        super.addSlot(new FocusSlot(inv,15,134,79));
-
-        super.addSlot(new FocusSlot(inv,16,8,102));
-        super.addSlot(new FocusSlot(inv,17,26,102));
-        super.addSlot(new FocusSlot(inv,18,44,102));
-        super.addSlot(new FocusSlot(inv,19,62,102));
-        super.addSlot(new FocusSlot(inv,20,80,102));
-        super.addSlot(new FocusSlot(inv,21,98,102));
-        super.addSlot(new FocusSlot(inv,22,116,102));
-        super.addSlot(new FocusSlot(inv,23,134,102));
-        super.addSlot(new FocusSlot(inv,24,152,102));
-
+        ItemStackHandler inv = be.getOptional().get();
+        super.addSlot(new FilterSlot(inv, 0, 61, 48));
+        super.addSlot(new FilterSlot(inv, 1, 79, 48));
+        super.addSlot(new FilterSlot(inv, 2, 97, 48));
+        super.addSlot(new FilterSlot(inv, 3, 61, 66));
+        super.addSlot(new FilterSlot(inv, 4, 79, 66));
+        super.addSlot(new FilterSlot(inv, 5, 97, 66));
+        super.addSlot(new FilterSlot(inv, 6, 61, 84));
+        super.addSlot(new FilterSlot(inv, 7, 79, 84));
+        super.addSlot(new FilterSlot(inv, 8, 97, 84));
     }
 
     private void createPlayerInventory(Inventory playerInv) {
@@ -102,35 +84,56 @@ public class AmethystFilterMenu extends AbstractContainerMenu
     }
 
     @Override
+    public void clicked(int slotId, int dragType, ClickType clickTypeIn, Player player) {
+        if (slotId < 36) {
+			super.clicked(slotId, dragType, clickTypeIn, player);
+			return;
+		}
+		if (clickTypeIn == ClickType.THROW)
+			return;
+
+		ItemStack held = getCarried();;
+		if (clickTypeIn == ClickType.CLONE) {
+			if (player.isCreative() && held.isEmpty()) {
+				ItemStack stackInSlot = this.slots.get(slotId).getItem().copy();
+				stackInSlot.setCount(stackInSlot.getMaxStackSize());
+				setCarried(stackInSlot);
+				return;
+			}
+			return;
+		}
+
+		ItemStack insert;
+		if (held.isEmpty()) {
+			insert = ItemStack.EMPTY;
+		} else {
+			insert = held.copy();
+			insert.setCount(1);
+		}
+		this.slots.get(slotId).set(insert);
+		getSlot(slotId).setChanged();
+    }
+
+    @Override
     public @NotNull ItemStack quickMoveStack(@NotNull Player pPlayer, int pIndex) {
-        Slot fromSlot = getSlot(pIndex);
-        ItemStack fromStack = fromSlot.getItem();
 
-        if(fromStack.getCount() <= 0)
-            fromSlot.set(ItemStack.EMPTY);
-
-        if(!fromSlot.hasItem())
-            return ItemStack.EMPTY;
-
-        ItemStack copyFromStack = fromStack.copy();
-
-        if(pIndex < 36) {
-            // We are inside of the player's inventory
-            if(!moveItemStackTo(fromStack, 36, 61, false))
-                return ItemStack.EMPTY;
-        } else if (pIndex < 61) {
-            // We are inside of the block entity inventory
-            if(!moveItemStackTo(fromStack, 0, 36, false))
-                return ItemStack.EMPTY;
-        } else {
-            System.err.println("Invalid slot index: " + pIndex);
-            return ItemStack.EMPTY;
-        }
-
-        fromSlot.setChanged();
-        fromSlot.onTake(pPlayer, fromStack);
-
-        return copyFromStack;
+        if (pIndex < 36) {
+			ItemStack stackToInsert = this.slots.get(pIndex).getItem();
+			for (int i = 36; i < 45; i++) {
+				ItemStack stack = this.slots.get(i).getItem();
+				if (stack.isEmpty()) {
+					ItemStack copy = stackToInsert.copy();
+					copy.setCount(1);
+					this.slots.get(i).set(copy);
+					getSlot(i).setChanged();
+					break;
+				}
+			}
+		} else {
+            this.slots.get(pIndex).set(ItemStack.EMPTY);
+			getSlot(pIndex).setChanged();
+		}
+		return ItemStack.EMPTY;
     }
 
     @Override
@@ -142,8 +145,8 @@ public class AmethystFilterMenu extends AbstractContainerMenu
         return this.blockEntity;
     }
 
-    class FocusSlot extends SlotItemHandler {
-        public FocusSlot(IItemHandler pContainer, int pContainerIndex, int pXPosition, int pYPosition) {
+    class FilterSlot extends SlotItemHandler {
+        public FilterSlot(IItemHandler pContainer, int pContainerIndex, int pXPosition, int pYPosition) {
             super(pContainer, pContainerIndex, pXPosition, pYPosition);
         }
 
@@ -153,9 +156,20 @@ public class AmethystFilterMenu extends AbstractContainerMenu
         }
 
         @Override
+        public boolean mayPickup(Player player) {
+            return false;
+        }
+
+        @Override
         public int getMaxStackSize() {
             return 1;
         }
+
+        @Override
+        public void set(ItemStack stack) {
+            // TODO Auto-generated method stub
+            super.set(stack);
+        }
     }
-    
+
 }

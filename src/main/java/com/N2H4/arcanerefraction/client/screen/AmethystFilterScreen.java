@@ -15,7 +15,7 @@ import com.N2H4.arcanerefraction.Menu.AmethystFilterMenu;
 public class AmethystFilterScreen extends AbstractContainerScreen<AmethystFilterMenu>
 {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(MODID, "textures/gui/amethyst_focus_gui.png");
+            new ResourceLocation(MODID, "textures/gui/amethyst_filter_gui.png");
 
     public AmethystFilterScreen(AmethystFilterMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);

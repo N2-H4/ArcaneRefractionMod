@@ -20,7 +20,7 @@ import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.Utils.CropHarvesting;
 import com.N2H4.arcanerefraction.Utils.EntityLoot;
-import com.ibm.icu.impl.coll.Collation;
+import com.N2H4.arcanerefraction.Utils.ILensPart;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -115,7 +115,6 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             {
                 timer = 0;
                 int coated_size=selectMode();
-                System.out.println(coated_size);
                 if(lens_size>coated_size)
                     lens_size=coated_size;
                 checkSkyAccess();
@@ -270,12 +269,12 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             for(int j=-size;j<=size;j++)
             {
                 BlockPos pos=worldPosition.offset(i,0,j);
-                if(level.getBlockState(pos).getBlock() == DISPERSIVE_AMETHYST_BLOCK.get() || level.getBlockState(pos).getBlock() == AMETHYST_FOCUS_BLOCK.get())
+                if(level.getBlockState(pos).getBlock() instanceof ILensPart || level.getBlockState(pos).getBlock() == AMETHYST_FOCUS_BLOCK.get())
                 {
                     for(int depth=1;depth<=depth_range;depth++)
                     {
                         pos=worldPosition.offset(i,-depth,j);
-                        if(level.getBlockState(pos).getBlock()!=Blocks.AIR && level.getBlockState(pos).getBlock()!=DISPERSIVE_AMETHYST_BLOCK.get() && level.getBlockState(pos).getBlock()!=AMETHYST_FOCUS_BLOCK.get())
+                        if(level.getBlockState(pos).getBlock()!=Blocks.AIR && !(level.getBlockState(pos).getBlock() instanceof ILensPart) && level.getBlockState(pos).getBlock()!=AMETHYST_FOCUS_BLOCK.get())
                         {
                             processed_positions.add(pos);
                             break;
@@ -570,8 +569,8 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(!(i==0 && j==0))
                 {
                     Block b=level.getBlockState(worldPosition.offset(i,0,j)).getBlock();
-                    if(b instanceof DispersiveAmethysyBlock)
-                        ((DispersiveAmethysyBlock)b).setMaster(this);
+                    if(b instanceof ILensPart)
+                        ((ILensPart)b).setMaster(this);
                 }
             }
         }
@@ -691,10 +690,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(value<=1 && value!=0)
                 {
                     Block b=level.getBlockState(worldPosition.offset(i,0,j)).getBlock();
-                    if(!(b instanceof DispersiveAmethysyBlock))
+                    if(!(b instanceof ILensPart))
                         return size;
                     else
-                        ((DispersiveAmethysyBlock)b).setMaster(this);
+                        ((ILensPart)b).setMaster(this);
                 }
             }
         }
@@ -711,10 +710,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(value<=5 && value>1 && value!=0)
                 {
                     Block b=level.getBlockState(worldPosition.offset(i,0,j)).getBlock();
-                    if(!(b instanceof DispersiveAmethysyBlock))
+                    if(!(b instanceof ILensPart))
                         return size;
                     else
-                        ((DispersiveAmethysyBlock)b).setMaster(this);
+                        ((ILensPart)b).setMaster(this);
                 }
             }
         }
@@ -730,10 +729,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(value<=10 && value>5 && value!=0)
                 {
                     Block b=level.getBlockState(worldPosition.offset(i,0,j)).getBlock();
-                    if(!(b instanceof DispersiveAmethysyBlock))
+                    if(!(b instanceof ILensPart))
                         return size;
                     else
-                        ((DispersiveAmethysyBlock)b).setMaster(this);
+                        ((ILensPart)b).setMaster(this);
                 }
             }
         }
@@ -749,10 +748,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(value<=20 && value>10 && value!=0)
                 {
                     Block b=level.getBlockState(worldPosition.offset(i,0,j)).getBlock();
-                    if(!(b instanceof DispersiveAmethysyBlock))
+                    if(!(b instanceof ILensPart))
                         return size;
                     else
-                        ((DispersiveAmethysyBlock)b).setMaster(this);
+                        ((ILensPart)b).setMaster(this);
                 }
             }
         }
@@ -768,10 +767,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(value<=41 && value>20 && value!=0)
                 {
                     Block b=level.getBlockState(worldPosition.offset(i,0,j)).getBlock();
-                    if(!(b instanceof DispersiveAmethysyBlock))
+                    if(!(b instanceof ILensPart))
                         return size;
                     else
-                        ((DispersiveAmethysyBlock)b).setMaster(this);
+                        ((ILensPart)b).setMaster(this);
                 }
             }
         }
@@ -791,7 +790,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(!(i==0 && j==0))
                 {
                     BlockPos pos=worldPosition.offset(i,0,j);
-                    if(level.getBlockState(pos).getBlock() instanceof DispersiveAmethysyBlock && !level.canSeeSky(pos.above()))
+                    if(level.getBlockState(pos).getBlock() instanceof ILensPart && !level.canSeeSky(pos.above()))
                     {
                         sky_access=false;
                         return;

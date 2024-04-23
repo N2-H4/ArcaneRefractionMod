@@ -1,6 +1,7 @@
 package com.N2H4.arcanerefraction.Block;
 
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
+import com.N2H4.arcanerefraction.Utils.ILensPart;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 
 
-public class DispersiveAmethysyBlock extends HalfTransparentBlock /*implements EntityBlock*/
+public class DispersiveAmethysyBlock extends HalfTransparentBlock implements ILensPart
 {
     AmethystFocusEntity master;
     private static boolean never(BlockState p_50806_, BlockGetter p_50807_, BlockPos p_50808_) {
