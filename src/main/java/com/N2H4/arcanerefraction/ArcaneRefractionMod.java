@@ -10,12 +10,14 @@ import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.particle.RayParticle;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.flag.FeatureFlags;
@@ -55,6 +57,7 @@ public class ArcaneRefractionMod
     public static final DeferredRegister<MenuType<?>> MENUS=DeferredRegister.create(BuiltInRegistries.MENU, MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, MODID);
     public static final DeferredBlock<Block> AMETHYST_FOCUS_BLOCK = BLOCKS.register("amethyst_focus", AmethystFocusBlock::new);
     public static final DeferredBlock<Block> DISPERSIVE_AMETHYST_BLOCK = BLOCKS.register("dispersive_amethyst", DispersiveAmethysyBlock::new);
     public static final DeferredBlock<Block> AMETHYST_FILTER_BLOCK = BLOCKS.register("amethyst_filter", AmethystFilterBlock::new);
@@ -76,6 +79,7 @@ public class ArcaneRefractionMod
     public static final TagKey<Item> LENS_COATING_TAG = ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES=DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, MODID);
     public static final DeferredHolder<ParticleType<?>,ParticleType<SimpleParticleType>> RAY_PARTICLE=PARTICLE_TYPES.register("ray_particle", () -> new SimpleParticleType(true));
+    public static final DeferredHolder<SoundEvent,SoundEvent> LENS_SOUND = SOUND_EVENTS.register("lens_sound", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "lens_sound")));
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcanerefraction"))
@@ -105,6 +109,7 @@ public class ArcaneRefractionMod
         MENUS.register(modEventBus);
         BLOCK_ENTITY_REGISTER.register(modEventBus);
         PARTICLE_TYPES.register(modEventBus);
+        SOUND_EVENTS.register(modEventBus);
         ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
 
         NeoForge.EVENT_BUS.register(this);

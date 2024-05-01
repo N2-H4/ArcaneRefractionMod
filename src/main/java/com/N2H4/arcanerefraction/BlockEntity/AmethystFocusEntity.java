@@ -11,6 +11,7 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.PURPUR_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.RAY_PARTICLE;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.SCULK_COATING;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.LENS_SOUND;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -71,6 +73,8 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     int timer = 300;
     int timer2 = 0;
     int ray_cooldown=120;
+    int sound_timer=300;
+    int sound_cooldown=300;
     boolean wokeUp = false;
     int lens_size = 0;
     int depth_range=10;
@@ -120,6 +124,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         {
             timer++;
             timer2++;
+            sound_timer+=level.getRandom().nextInt(5);
             if (timer > 20)
             {
                 timer = 0;
@@ -129,6 +134,11 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 checkSkyAccess();
                 scanUnder();
                 this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+            }
+            if(sound_timer>sound_cooldown)
+            {
+                sound_timer=0;
+                level.playSound(null, worldPosition, LENS_SOUND.get(), SoundSource.BLOCKS,0.4f,1.0f);
             }
             if(timer2>40 && sky_access)
             {

@@ -12,5 +12,6 @@
     "item.arcanerefraction.sculk_coating": "Sculk Coating",
     "item.arcanerefraction.fire_coral_coating": "Fire Coral Coating",
     "item.arcanerefraction.copper_coating": "Copper Coating",
-    "item.arcanerefraction.purpur_coating": "Purpur Coating"
+    "item.arcanerefraction.purpur_coating": "Purpur Coating",
+    "sounds.arcanerefraction.lens_sound": "Lens Ambience"
 }

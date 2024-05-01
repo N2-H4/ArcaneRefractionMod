@@ -1,0 +1,10 @@
+{
+    "lens_sound":
+    {
+        "subtitles": "sounds.arcanerefraction.lens_sound",
+        "sounds":
+        [
+            "arcanerefraction:lens_sound"
+        ]
+    }
+}
