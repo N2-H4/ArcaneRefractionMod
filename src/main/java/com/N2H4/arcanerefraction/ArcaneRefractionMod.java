@@ -67,6 +67,7 @@ public class ArcaneRefractionMod
     public static final DeferredItem<Item> FROGLIGHT_COATING = ITEMS.registerSimpleItem("froglight_coating");
     public static final DeferredItem<Item> SCULK_COATING = ITEMS.registerSimpleItem("sculk_coating");
     public static final DeferredItem<Item> FIRE_CORAL_COATING = ITEMS.registerSimpleItem("fire_coral_coating");
+    public static final DeferredItem<Item> COPPER_COATING = ITEMS.registerSimpleItem("copper_coating");
     public static final DeferredItem<Item> PURPUR_COATING = ITEMS.registerSimpleItem("purpur_coating");
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFocusMenu>> AMETHYST_FOCUS_MENU = MENUS.register("amethyst_focus_menu",() -> IMenuTypeExtension.create(AmethystFocusMenu::new));
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFilterMenu>> AMETHYST_FILTER_MENU = MENUS.register("amethyst_filter_menu",() -> IMenuTypeExtension.create(AmethystFilterMenu::new));
@@ -89,6 +90,7 @@ public class ArcaneRefractionMod
                 output.accept(FROGLIGHT_COATING.get());
                 output.accept(SCULK_COATING.get());
                 output.accept(FIRE_CORAL_COATING.get());
+                output.accept(COPPER_COATING.get());
                 output.accept(PURPUR_COATING.get());
             }).build());
 

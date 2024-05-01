@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+      "a*a",
+      "*b*",
+      "a*a"
+    ],
+    "key": {
+      "a": {
+        "item": "minecraft:amethyst_shard"
+      },
+      "b": {
+        "item": "minecraft:blue_ice"
+      },
+      "*": {
+        "item": "minecraft:copper_ingot"
+      }
+    },
+    "result": {
+      "item": "arcanerefraction:copper_coating",
+      "count": 2
+    }
+  }
+  

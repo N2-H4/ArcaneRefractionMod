@@ -2,6 +2,7 @@ package com.N2H4.arcanerefraction.BlockEntity;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_ENTITY;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.BLACKSTONE_COATING;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.COPPER_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.CRYING_OBSIDIAN_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.FIRE_CORAL_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.FROGLIGHT_COATING;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import com.N2H4.arcanerefraction.Block.AmethystFilterBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
+import com.N2H4.arcanerefraction.Utils.AmethystFilter;
 import com.N2H4.arcanerefraction.Utils.BlockMining;
 import com.N2H4.arcanerefraction.Utils.CropHarvesting;
 import com.N2H4.arcanerefraction.Utils.EntityLoot;
@@ -62,6 +64,7 @@ import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
 
 public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 {
@@ -75,7 +78,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     boolean sky_access = false;
     LensMode mode=LensMode.OFF;
     List<BlockPos> processed_positions;
-    List<Item> filtered_items;
+    AmethystFilter filtered_items;
 
     private final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
     
@@ -98,7 +101,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     {
         super(AMETHYST_FOCUS_ENTITY.get(), pos, state);
         processed_positions = new ArrayList<BlockPos>();
-        filtered_items = new ArrayList<Item>();
+        filtered_items = new AmethystFilter();
     }
 
     public void tickServer() 
@@ -125,7 +128,6 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                     lens_size=coated_size;
                 checkSkyAccess();
                 scanUnder();
-                System.out.println(processed_positions);
                 this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
             if(timer2>40 && sky_access)
@@ -210,6 +212,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                         }
                         break;
                     }
+                    case COLLECT:
+                    {
+                        collectItems();
+                    }
                     case TRANSFORM:
                     {
                         if(is_day)
@@ -288,7 +294,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                         {
                             Item item=inv.getStackInSlot(s).getItem();
                             if(item!=Items.AIR && !filtered_items.contains(item))
-                                filtered_items.add(item);
+                                filtered_items.insertItem(pos, item);
                         }
                     }
 
@@ -516,13 +522,32 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         for (BlockPos pos : processed_positions) 
         {
             BlockState bs=this.level.getBlockState(pos);
-            System.out.println(bs.getBlock().asItem());
             if(BlockMining.canMine(level, bs, pos, silk_touch) && filtered_items.contains(bs.getBlock().asItem()))
             {
                 BlockMining.dropResources(level, bs, pos, silk_touch);
                 blocks_to_mine--;
                 if(blocks_to_mine<=0) 
                     return;
+            }
+        }
+    }
+
+    public void collectItems()
+    {
+        int size = lens_size != 5 ? lens_size : 6;
+        Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
+        Vec3 bottomCorner = this.worldPosition.offset(-size, -depth_range, -size).getCenter();
+        AABB box = new AABB(topCorner, bottomCorner);
+        List<Entity> entities =level.getEntities(null, box);
+        for (Entity entity : entities) 
+        {
+            if(entity instanceof ItemEntity)
+            {
+                BlockPos p=filtered_items.getPos(((ItemEntity)entity).getItem().getItem());
+                if(p!=null)
+                {
+                    ((ItemEntity)entity).teleportTo(p.getX()+0.5, p.getY()-1, p.getZ()+0.5);
+                }
             }
         }
     }
@@ -643,6 +668,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         else if(item_first.getItem()==FIRE_CORAL_COATING.get())
         {
             mode=LensMode.MELTFREEZE;
+        }
+        else if(item_first.getItem()==COPPER_COATING.get())
+        {
+            mode=LensMode.COLLECT;
         }
         else if(item_first.getItem()==PURPUR_COATING.get())
         {
@@ -860,6 +889,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         MELTFREEZE,
         GATHER,
         GENERATE,
+        COLLECT,
         TRANSFORM
     }
 }
