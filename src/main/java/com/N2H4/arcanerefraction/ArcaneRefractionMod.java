@@ -1,12 +1,19 @@
 package com.N2H4.arcanerefraction;
 
 import com.N2H4.arcanerefraction.Block.DispersiveAmethysyBlock;
+import com.N2H4.arcanerefraction.Block.DispersiveRegolithBlock;
+import com.N2H4.arcanerefraction.Block.RegolithFilterBlock;
+import com.N2H4.arcanerefraction.Block.RegolithFocusBlock;
 import com.N2H4.arcanerefraction.Block.AmethystFilterBlock;
 import com.N2H4.arcanerefraction.Block.AmethystFocusBlock;
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFilterEntity;
 import com.N2H4.arcanerefraction.BlockEntity.AmethystFocusEntity;
+import com.N2H4.arcanerefraction.BlockEntity.RegolithFilterEntity;
+import com.N2H4.arcanerefraction.BlockEntity.RegolithFocusEntity;
 import com.N2H4.arcanerefraction.Menu.AmethystFilterMenu;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
+import com.N2H4.arcanerefraction.Menu.RegolithFilterMenu;
+import com.N2H4.arcanerefraction.Menu.RegolithFocusMenu;
 import com.N2H4.arcanerefraction.particle.RayParticle;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -52,18 +59,32 @@ public class ArcaneRefractionMod
     public static final String MODID = "arcanerefraction";
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    //REGISTERS
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
     public static final DeferredRegister<MenuType<?>> MENUS=DeferredRegister.create(BuiltInRegistries.MENU, MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, MODID);
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, MODID);
+    //BLOCKS
+    //amethyst
     public static final DeferredBlock<Block> AMETHYST_FOCUS_BLOCK = BLOCKS.register("amethyst_focus", AmethystFocusBlock::new);
     public static final DeferredBlock<Block> DISPERSIVE_AMETHYST_BLOCK = BLOCKS.register("dispersive_amethyst", DispersiveAmethysyBlock::new);
     public static final DeferredBlock<Block> AMETHYST_FILTER_BLOCK = BLOCKS.register("amethyst_filter", AmethystFilterBlock::new);
+    //regolith
+    public static final DeferredBlock<Block> REGOLITH_FOCUS_BLOCK = BLOCKS.register("regolith_focus", RegolithFocusBlock::new);
+    public static final DeferredBlock<Block> DISPERSIVE_REGOLITH_BLOCK = BLOCKS.register("dispersive_regolith", DispersiveRegolithBlock::new);
+    public static final DeferredBlock<Block> REGOLITH_FILTER_BLOCK = BLOCKS.register("regolith_filter", RegolithFilterBlock::new);
+    //ITEMS
+    //amethyst
     public static final DeferredItem<BlockItem> AMETHYST_FOCUS_ITEM = ITEMS.registerSimpleBlockItem("amethyst_focus", AMETHYST_FOCUS_BLOCK);
     public static final DeferredItem<BlockItem> DISPERSIVE_AMETHYST_ITEM = ITEMS.registerSimpleBlockItem("dispersive_amethyst", DISPERSIVE_AMETHYST_BLOCK);
     public static final DeferredItem<BlockItem> AMETHYST_FILTER_ITEM = ITEMS.registerSimpleBlockItem("amethyst_filter", AMETHYST_FILTER_BLOCK);
+    //regolith
+    public static final DeferredItem<BlockItem> REGOLITH_FOCUS_ITEM = ITEMS.registerSimpleBlockItem("regolith_focus", REGOLITH_FOCUS_BLOCK);
+    public static final DeferredItem<BlockItem> DISPERSIVE_REGOLITH_ITEM = ITEMS.registerSimpleBlockItem("dispersive_regolith", DISPERSIVE_REGOLITH_BLOCK);
+    public static final DeferredItem<BlockItem> REGOLITH_FILTER_ITEM = ITEMS.registerSimpleBlockItem("regolith_filter", REGOLITH_FILTER_BLOCK);
+    //coatings
     public static final DeferredItem<Item> HONEYCOMB_COATING = ITEMS.registerSimpleItem("honeycomb_coating");
     public static final DeferredItem<Item> BLACKSTONE_COATING = ITEMS.registerSimpleItem("blackstone_coating");
     public static final DeferredItem<Item> CRYING_OBSIDIAN_COATING = ITEMS.registerSimpleItem("crying_obsidian_coating");
@@ -72,10 +93,17 @@ public class ArcaneRefractionMod
     public static final DeferredItem<Item> FIRE_CORAL_COATING = ITEMS.registerSimpleItem("fire_coral_coating");
     public static final DeferredItem<Item> COPPER_COATING = ITEMS.registerSimpleItem("copper_coating");
     public static final DeferredItem<Item> PURPUR_COATING = ITEMS.registerSimpleItem("purpur_coating");
+    //MENUS
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFocusMenu>> AMETHYST_FOCUS_MENU = MENUS.register("amethyst_focus_menu",() -> IMenuTypeExtension.create(AmethystFocusMenu::new));
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFilterMenu>> AMETHYST_FILTER_MENU = MENUS.register("amethyst_filter_menu",() -> IMenuTypeExtension.create(AmethystFilterMenu::new));
+    public static final DeferredHolder<MenuType<?>,MenuType<RegolithFocusMenu>> REGOLITH_FOCUS_MENU = MENUS.register("regolith_focus_menu",() -> IMenuTypeExtension.create(RegolithFocusMenu::new));
+    public static final DeferredHolder<MenuType<?>,MenuType<RegolithFilterMenu>> REGOLITH_FILTER_MENU = MENUS.register("regolith_filter_menu",() -> IMenuTypeExtension.create(RegolithFilterMenu::new));
+    //BLOCK ENTITIES
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AmethystFocusEntity>> AMETHYST_FOCUS_ENTITY = BLOCK_ENTITY_REGISTER.register("amethyst_focus_entity",() -> BlockEntityType.Builder.of(AmethystFocusEntity::new, AMETHYST_FOCUS_BLOCK.get()).build(null));
     public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<AmethystFilterEntity>> AMETHYST_FILTER_ENTITY = BLOCK_ENTITY_REGISTER.register("amethyst_filter_entity",() -> BlockEntityType.Builder.of(AmethystFilterEntity::new, AMETHYST_FILTER_BLOCK.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<RegolithFocusEntity>> REGOLITH_FOCUS_ENTITY = BLOCK_ENTITY_REGISTER.register("regolith_focus_entity",() -> BlockEntityType.Builder.of(RegolithFocusEntity::new, REGOLITH_FOCUS_BLOCK.get()).build(null));
+    public static final DeferredHolder<BlockEntityType<?>,BlockEntityType<RegolithFilterEntity>> REGOLITH_FILTER_ENTITY = BLOCK_ENTITY_REGISTER.register("regolith_filter_entity",() -> BlockEntityType.Builder.of(RegolithFilterEntity::new, REGOLITH_FILTER_BLOCK.get()).build(null));
+    //OTHER
     public static final TagKey<Item> LENS_COATING_TAG = ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES=DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, MODID);
     public static final DeferredHolder<ParticleType<?>,ParticleType<SimpleParticleType>> RAY_PARTICLE=PARTICLE_TYPES.register("ray_particle", () -> new SimpleParticleType(true));
@@ -88,6 +116,9 @@ public class ArcaneRefractionMod
                 output.accept(AMETHYST_FOCUS_ITEM.get());
                 output.accept(DISPERSIVE_AMETHYST_ITEM.get());
                 output.accept(AMETHYST_FILTER_ITEM.get());
+                output.accept(REGOLITH_FOCUS_ITEM.get());
+                output.accept(DISPERSIVE_REGOLITH_ITEM.get());
+                output.accept(REGOLITH_FILTER_ITEM.get());
                 output.accept(HONEYCOMB_COATING.get());
                 output.accept(BLACKSTONE_COATING.get());
                 output.accept(CRYING_OBSIDIAN_COATING.get());

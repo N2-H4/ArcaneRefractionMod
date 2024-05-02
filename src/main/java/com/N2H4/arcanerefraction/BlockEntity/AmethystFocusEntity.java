@@ -36,6 +36,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.NaturalSpawner;
@@ -84,9 +85,9 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     List<BlockPos> processed_positions;
     AmethystFilter filtered_items;
 
-    private final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
+    protected final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
     
-    private final ItemStackHandler inventory = new ItemStackHandler(25)
+    protected final ItemStackHandler inventory = new ItemStackHandler(25)
     {
         @Override
         protected void onContentsChanged(int slot) 
@@ -104,6 +105,13 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     public AmethystFocusEntity(BlockPos pos, BlockState state) 
     {
         super(AMETHYST_FOCUS_ENTITY.get(), pos, state);
+        processed_positions = new ArrayList<BlockPos>();
+        filtered_items = new AmethystFilter();
+    }
+
+    protected AmethystFocusEntity(BlockPos pos, BlockState state, BlockEntityType<?> type)
+    {
+        super(type, pos, state);
         processed_positions = new ArrayList<BlockPos>();
         filtered_items = new AmethystFilter();
     }
@@ -243,7 +251,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
     
-    private void spawnParticles()
+    protected void spawnParticles()
     {
         if(lens_size>=1)
         {
@@ -283,7 +291,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void scanUnder()
+    protected void scanUnder()
     {
         processed_positions.clear();
         int size = lens_size != 5 ? lens_size : 6;
@@ -339,7 +347,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     }
 
     @SuppressWarnings("deprecation")
-    private void grow()
+    protected void grow()
     {
         for (BlockPos pos : processed_positions) 
         {
@@ -355,7 +363,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void harvestAndReplant()
+    protected void harvestAndReplant()
     {
         for (BlockPos pos : processed_positions) 
         {
@@ -365,7 +373,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     }
 
     @SuppressWarnings("deprecation")
-    private void spawnHostile()
+    protected void spawnHostile()
     {
         AABB areaToCheck = new AABB(worldPosition).inflate(lens_size, depth_range, lens_size);
 		int entityCount = level.getEntitiesOfClass(Mob.class, areaToCheck, entity -> entity != null && entity instanceof Enemy).size();
@@ -399,7 +407,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     }
 
     @SuppressWarnings("deprecation")
-    private void spawnPassive()
+    protected void spawnPassive()
     {
         AABB areaToCheck = new AABB(worldPosition).inflate(lens_size, depth_range, lens_size);
 		int entityCount = level.getEntitiesOfClass(Mob.class, areaToCheck, entity -> entity != null && entity instanceof Animal).size();
@@ -432,7 +440,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void hurt()
+    protected void hurt()
     {
         int size = lens_size != 5 ? lens_size : 6;
         Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
@@ -448,7 +456,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void heal()
+    protected void heal()
     {
         int size = lens_size != 5 ? lens_size : 6;
         Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
@@ -464,7 +472,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void melt()
+    protected void melt()
     {
         for (BlockPos pos : processed_positions) 
         {
@@ -477,7 +485,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 
     }
 
-    private void freeze()
+    protected void freeze()
     {
         for (BlockPos pos : processed_positions) 
         {
@@ -489,7 +497,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void shedItems()
+    protected void shedItems()
     {
         int size = lens_size != 5 ? lens_size : 6;
         Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
@@ -505,7 +513,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void spawnOres()
+    protected void spawnOres()
     {
         Collections.shuffle(processed_positions);
         int transform_count=3*lens_size;
@@ -525,7 +533,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    private void mineBlocks(boolean silk_touch)
+    protected void mineBlocks(boolean silk_touch)
     {
         Collections.shuffle(processed_positions);
         int blocks_to_mine=4*lens_size;
@@ -651,7 +659,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 
     }
 
-    private int selectMode()
+    protected int selectMode()
     {
         ItemStack item_first=inventory.getStackInSlot(0);
         //cant get item from deffered holder in switch case
@@ -753,7 +761,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         return coated_size;
     }
 
-    private int calcLensSize()
+    protected int calcLensSize()
     {
         int size=0;
         is_formed=false;
@@ -857,7 +865,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         return size;
     }
 
-    private void checkSkyAccess()
+    protected void checkSkyAccess()
     {
         sky_access=true;
         int size = lens_size != 5 ? lens_size : 6;

@@ -16,15 +16,16 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class AmethystFilterEntity extends BlockEntity implements MenuProvider 
 {
-    private final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
+    protected final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
 
-    private final ItemStackHandler inventory = new ItemStackHandler(9)
+    protected final ItemStackHandler inventory = new ItemStackHandler(9)
     {
         @Override
         protected void onContentsChanged(int slot) 
@@ -42,6 +43,11 @@ public class AmethystFilterEntity extends BlockEntity implements MenuProvider
     public AmethystFilterEntity(BlockPos pos, BlockState state) 
     {
         super(AMETHYST_FILTER_ENTITY.get(), pos, state);
+    }
+
+    protected AmethystFilterEntity(BlockPos pos, BlockState state, BlockEntityType<?> type)
+    {
+        super(type, pos, state);
     }
 
     @Override

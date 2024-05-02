@@ -4,6 +4,9 @@
     [
         "arcanerefraction:dispersive_amethyst",
         "arcanerefraction:amethyst_focus",
-        "arcanerefraction:amethyst_filter"
+        "arcanerefraction:amethyst_filter",
+        "arcanerefraction:regolith_focus",
+        "arcanerefraction:regolith_filter",
+        "arcanerefraction:dispersive_regolith"
     ]
 }

@@ -30,7 +30,7 @@ public class AmethystFilterBlock extends HalfTransparentBlock implements EntityB
 {
     AmethystFocusEntity master;
     
-    private static boolean never(BlockState p_50806_, BlockGetter p_50807_, BlockPos p_50808_) {
+    protected static boolean never(BlockState p_50806_, BlockGetter p_50807_, BlockPos p_50808_) {
         return false;
     }
 
