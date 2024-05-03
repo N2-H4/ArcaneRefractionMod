@@ -1,15 +1,20 @@
 package com.N2H4.arcanerefraction.BlockEntity;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_ENTITY;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.BLACKSTONE_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.COPPER_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.CRYING_OBSIDIAN_COATING;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.DISPERSIVE_AMETHYST_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.DISPERSIVE_REGOLITH_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.FIRE_CORAL_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.FROGLIGHT_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.HONEYCOMB_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.PURPUR_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.RAY_PARTICLE;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FILTER_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.SCULK_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.LENS_SOUND;
 
@@ -18,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.N2H4.arcanerefraction.Block.AmethystFilterBlock;
+import com.N2H4.arcanerefraction.Block.DispersiveRegolithBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.Utils.AmethystFilter;
 import com.N2H4.arcanerefraction.Utils.BlockMining;
@@ -238,11 +244,11 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                     {
                         if(is_day)
                         {
-                            
+                            transform(false);
                         }
                         else
                         {
-                            
+                            transform(true);
                         }
                         break;
                     }
@@ -550,7 +556,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
 
-    public void collectItems()
+    protected void collectItems()
     {
         int size = lens_size != 5 ? lens_size : 6;
         Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
@@ -565,6 +571,43 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 if(p!=null)
                 {
                     ((ItemEntity)entity).teleportTo(p.getX()+0.5, p.getY()-1, p.getZ()+0.5);
+                }
+            }
+        }
+    }
+
+    protected void transform(boolean night) {
+        Collections.shuffle(processed_positions);
+        int transform_count = 3 * lens_size;
+        for (BlockPos pos : processed_positions) {
+            BlockState bs = this.level.getBlockState(pos);
+            if (night && bs.getBlock() == Blocks.BEDROCK) {
+                bs = this.level.getBlockState(pos.above());
+                if (bs.getBlock() == DISPERSIVE_AMETHYST_BLOCK.get()) {
+                    if (pos.getY()+1 < 0) {
+                        level.setBlock(pos.above(), DISPERSIVE_REGOLITH_BLOCK.get().defaultBlockState(), 2);
+                        transform_count--;
+                        if (transform_count <= 0)
+                            return;
+                    }
+                }
+                if (bs.getBlock() == AMETHYST_FOCUS_BLOCK.get()) {
+                    if (pos.getY()+1 < 0) {
+                        bs.onRemove(level, pos.above(), REGOLITH_FOCUS_BLOCK.get().defaultBlockState(), false);
+                        level.setBlock(pos.above(), REGOLITH_FOCUS_BLOCK.get().defaultBlockState(), 2);
+                        transform_count--;
+                        if (transform_count <= 0)
+                            return;
+                    }
+                }
+                if (bs.getBlock() == AMETHYST_FILTER_BLOCK.get()) {
+                    if (pos.getY()+1 < 0) {
+                        bs.onRemove(level, pos.above(), REGOLITH_FILTER_BLOCK.get().defaultBlockState(), false);
+                        level.setBlock(pos.above(), REGOLITH_FILTER_BLOCK.get().defaultBlockState(), 2);
+                        transform_count--;
+                        if (transform_count <= 0)
+                            return;
+                    }
                 }
             }
         }
