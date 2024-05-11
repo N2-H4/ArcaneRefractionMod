@@ -1,8 +1,8 @@
 package com.N2H4.arcanerefraction.BlockEntity;
 
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FILTER_ENTITY;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FILTER_ENTITY;
 
-import com.N2H4.arcanerefraction.Menu.RegolithFilterMenu;
+import com.N2H4.arcanerefraction.Menu.TephraFilterMenu;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -11,20 +11,20 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class RegolithFilterEntity extends AmethystFilterEntity 
+public class TephraFilterEntity extends AmethystFilterEntity 
 {
-    public RegolithFilterEntity(BlockPos pos, BlockState state)
+    public TephraFilterEntity(BlockPos pos, BlockState state)
     {
-        super(pos,state,REGOLITH_FILTER_ENTITY.get());
+        super(pos,state,TEPHRA_FILTER_ENTITY.get());
     }
 
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return new RegolithFilterMenu(pContainerId, pPlayerInventory,this);
+        return new TephraFilterMenu(pContainerId, pPlayerInventory,this);
     }
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.arcanerefraction.regolith_filter_menu");
+        return Component.translatable("container.arcanerefraction.tephra_filter_menu");
     }
 }

@@ -7,6 +7,9 @@
         "arcanerefraction:amethyst_filter",
         "arcanerefraction:regolith_focus",
         "arcanerefraction:regolith_filter",
-        "arcanerefraction:dispersive_regolith"
+        "arcanerefraction:dispersive_regolith",
+        "arcanerefraction:tephra_focus",
+        "arcanerefraction:tephra_filter",
+        "arcanerefraction:dispersive_tephra"
     ]
 }

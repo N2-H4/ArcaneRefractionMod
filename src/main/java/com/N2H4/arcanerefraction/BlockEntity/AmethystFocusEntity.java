@@ -7,6 +7,7 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.COPPER_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.CRYING_OBSIDIAN_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.DISPERSIVE_AMETHYST_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.DISPERSIVE_REGOLITH_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.DISPERSIVE_TEPHRA_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.FIRE_CORAL_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.FROGLIGHT_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.HONEYCOMB_COATING;
@@ -15,6 +16,8 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.PURPUR_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.RAY_PARTICLE;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FILTER_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FILTER_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.SCULK_COATING;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.LENS_SOUND;
 
@@ -23,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.N2H4.arcanerefraction.Block.AmethystFilterBlock;
-import com.N2H4.arcanerefraction.Block.DispersiveRegolithBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.Utils.AmethystFilter;
 import com.N2H4.arcanerefraction.Utils.BlockMining;
@@ -44,7 +46,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
@@ -71,7 +72,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.common.IPlantable;
 import net.neoforged.neoforge.common.util.Lazy;
-import net.neoforged.neoforge.common.util.FakePlayer;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 
@@ -239,6 +239,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                     case COLLECT:
                     {
                         collectItems();
+                        break;
                     }
                     case TRANSFORM:
                     {
@@ -604,6 +605,35 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                     if (pos.getY()+1 < 0) {
                         bs.onRemove(level, pos.above(), REGOLITH_FILTER_BLOCK.get().defaultBlockState(), false);
                         level.setBlock(pos.above(), REGOLITH_FILTER_BLOCK.get().defaultBlockState(), 2);
+                        transform_count--;
+                        if (transform_count <= 0)
+                            return;
+                    }
+                }
+            }
+            if (!night && bs.getBlock() == Blocks.MAGMA_BLOCK) {
+                bs = this.level.getBlockState(pos.above());
+                if (bs.getBlock() == DISPERSIVE_AMETHYST_BLOCK.get()) {
+                    if (pos.getY()+1 > 200) {
+                        level.setBlock(pos.above(), DISPERSIVE_TEPHRA_BLOCK.get().defaultBlockState(), 2);
+                        transform_count--;
+                        if (transform_count <= 0)
+                            return;
+                    }
+                }
+                if (bs.getBlock() == AMETHYST_FOCUS_BLOCK.get()) {
+                    if (pos.getY()+1 > 200) {
+                        bs.onRemove(level, pos.above(), TEPHRA_FOCUS_BLOCK.get().defaultBlockState(), false);
+                        level.setBlock(pos.above(), TEPHRA_FOCUS_BLOCK.get().defaultBlockState(), 2);
+                        transform_count--;
+                        if (transform_count <= 0)
+                            return;
+                    }
+                }
+                if (bs.getBlock() == AMETHYST_FILTER_BLOCK.get()) {
+                    if (pos.getY()+1 > 200) {
+                        bs.onRemove(level, pos.above(), TEPHRA_FILTER_BLOCK.get().defaultBlockState(), false);
+                        level.setBlock(pos.above(), TEPHRA_FILTER_BLOCK.get().defaultBlockState(), 2);
                         transform_count--;
                         if (transform_count <= 0)
                             return;

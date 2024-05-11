@@ -1,11 +1,11 @@
 package com.N2H4.arcanerefraction.BlockEntity;
 
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.LENS_SOUND;
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_BLOCK;
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_ENTITY;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_ENTITY;
 
-import com.N2H4.arcanerefraction.Block.RegolithFilterBlock;
-import com.N2H4.arcanerefraction.Menu.RegolithFocusMenu;
+import com.N2H4.arcanerefraction.Block.TephraFilterBlock;
+import com.N2H4.arcanerefraction.Menu.TephraFocusMenu;
 import com.N2H4.arcanerefraction.Utils.ILensPart;
 
 import net.minecraft.core.BlockPos;
@@ -21,11 +21,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
-public class RegolithFocusEntity extends AmethystFocusEntity
+public class TephraFocusEntity extends AmethystFocusEntity
 {
-    public RegolithFocusEntity(BlockPos pos, BlockState state) 
+    public TephraFocusEntity(BlockPos pos, BlockState state) 
     {
-        super(pos, state, REGOLITH_FOCUS_ENTITY.get());
+        super(pos, state, TEPHRA_FOCUS_ENTITY.get());
     }
 
     @Override
@@ -76,32 +76,32 @@ public class RegolithFocusEntity extends AmethystFocusEntity
                     }
                     case GROW:
                     {
-                        harvestAndReplant();
+                        grow();
                         break;
                     }
                     case SPAWN:
                     {
-                        spawnPassive();
+                        spawnHostile();
                         break;
                     }
                     case HEALDMG:
                     {
-                        hurt();
+                        heal();
                         break;
                     }
                     case MELTFREEZE:
                     {
-                        freeze();
+                        melt();
                         break;
                     }
                     case GATHER:
                     {
-                        mineBlocks(true);
+                        mineBlocks(false);
                         break;
                     }
                     case GENERATE:
                     {
-                        spawnOres();
+                        shedItems();
                         break;
                     }
                     case COLLECT:
@@ -125,11 +125,11 @@ public class RegolithFocusEntity extends AmethystFocusEntity
             {
                 BlockPos pos=worldPosition.offset(i,0,j);
                 Block b=level.getBlockState(pos).getBlock();
-                if(b instanceof ILensPart || b == REGOLITH_FOCUS_BLOCK.get())
+                if(b instanceof ILensPart || b == TEPHRA_FOCUS_BLOCK.get())
                 {
-                    if(b instanceof RegolithFilterBlock)
+                    if(b instanceof TephraFilterBlock)
                     {
-                        RegolithFilterEntity be=(RegolithFilterEntity)level.getBlockEntity(pos);
+                        TephraFilterEntity be=(TephraFilterEntity)level.getBlockEntity(pos);
                         ItemStackHandler inv=be.getInventory();
                         int slot_count=inv.getSlots();
                         for(int s=0;s<slot_count;s++)
@@ -144,7 +144,7 @@ public class RegolithFocusEntity extends AmethystFocusEntity
                     {
                         pos=worldPosition.offset(i,-depth,j);
                         b=level.getBlockState(pos).getBlock();
-                        if(b!=Blocks.AIR && !(b instanceof ILensPart) && b!=REGOLITH_FOCUS_BLOCK.get())
+                        if(b!=Blocks.AIR && !(b instanceof ILensPart) && b!=TEPHRA_FOCUS_BLOCK.get())
                         {
                             processed_positions.add(pos);
                             break;
@@ -158,12 +158,12 @@ public class RegolithFocusEntity extends AmethystFocusEntity
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) 
     {
-        return new RegolithFocusMenu(pContainerId, pPlayerInventory,this);
+        return new TephraFocusMenu(pContainerId, pPlayerInventory,this);
     }
 
     @Override
     public Component getDisplayName() 
     {
-        return Component.translatable("container.arcanerefraction.regolith_focus_menu");
+        return Component.translatable("container.arcanerefraction.tephra_focus_menu");
     }
 }

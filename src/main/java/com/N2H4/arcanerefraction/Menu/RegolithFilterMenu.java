@@ -1,14 +1,10 @@
 package com.N2H4.arcanerefraction.Menu;
 
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_BLOCK;
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_MENU;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FILTER_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FILTER_MENU;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.ApiStatus.OverrideOnly;
 
-import com.N2H4.arcanerefraction.BlockEntity.AmethystFilterEntity;
 import com.N2H4.arcanerefraction.BlockEntity.RegolithFilterEntity;
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,7 +14,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.IItemHandler;

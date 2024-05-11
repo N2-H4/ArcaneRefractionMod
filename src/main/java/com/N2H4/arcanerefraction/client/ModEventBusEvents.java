@@ -11,8 +11,10 @@ import com.N2H4.arcanerefraction.ArcaneRefractionMod;
 import com.N2H4.arcanerefraction.particle.RayParticle;
 
 @Mod.EventBusSubscriber(modid = ArcaneRefractionMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("deprecation")
 public class ModEventBusEvents
 {
+    @SuppressWarnings("resource")
     @SubscribeEvent
     public static void registerParticleFactories(final RegisterParticleProvidersEvent event) {
         Minecraft.getInstance().particleEngine.register(RAY_PARTICLE.get(), RayParticle.Provider::new);

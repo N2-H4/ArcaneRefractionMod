@@ -18,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -119,6 +118,7 @@ public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBl
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(@Nonnull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
         if (!level.isClientSide()) {
             BlockEntity be = level.getBlockEntity(pos);
@@ -140,7 +140,7 @@ public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBl
         if (!pLevel.isClientSide) 
         {
             boolean previouslyPowered = pState.getValue(BlockStateProperties.POWERED);
-            BlockEntity tile = pLevel.getBlockEntity(pPos);
+            //BlockEntity tile = pLevel.getBlockEntity(pPos);
             if(previouslyPowered != pLevel.hasNeighborSignal(pPos))
             {
                 pLevel.setBlock(pPos, pState.cycle(BlockStateProperties.POWERED), 2 | 16);

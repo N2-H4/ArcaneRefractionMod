@@ -1,11 +1,11 @@
 package com.N2H4.arcanerefraction.Menu;
 
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_BLOCK;
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_MENU;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FILTER_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FILTER_MENU;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.N2H4.arcanerefraction.BlockEntity.AmethystFilterEntity;
+import com.N2H4.arcanerefraction.BlockEntity.TephraFilterEntity;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -20,20 +20,20 @@ import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
-public class AmethystFilterMenu extends AbstractContainerMenu {
+public class TephraFilterMenu extends AbstractContainerMenu {
 
-    private final AmethystFilterEntity blockEntity;
+    private final TephraFilterEntity blockEntity;
     private final ContainerLevelAccess levelAccess;
 
     // Client Constructor
-    public AmethystFilterMenu(int containerId, Inventory playerInv, FriendlyByteBuf additionalData) {
+    public TephraFilterMenu(int containerId, Inventory playerInv, FriendlyByteBuf additionalData) {
         this(containerId, playerInv, playerInv.player.level().getBlockEntity(additionalData.readBlockPos()));
     }
 
     // Server Constructor
-    public AmethystFilterMenu(int containerId, Inventory playerInv, BlockEntity blockEntity) {
-        super(AMETHYST_FILTER_MENU.get(), containerId);
-        if (blockEntity instanceof AmethystFilterEntity be) {
+    public TephraFilterMenu(int containerId, Inventory playerInv, BlockEntity blockEntity) {
+        super(TEPHRA_FILTER_MENU.get(), containerId);
+        if (blockEntity instanceof TephraFilterEntity be) {
             this.blockEntity = be;
         } else {
             throw new IllegalStateException("Incorrect block entity class (%s) passed into menu"
@@ -47,7 +47,7 @@ public class AmethystFilterMenu extends AbstractContainerMenu {
         createBlockEntityInventory(be);
     }
 
-    private void createBlockEntityInventory(AmethystFilterEntity be) {
+    private void createBlockEntityInventory(TephraFilterEntity be) {
 
         ItemStackHandler inv = be.getOptional().get();
         super.addSlot(new FilterSlot(inv, 0, 61, 48));
@@ -136,10 +136,10 @@ public class AmethystFilterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(@NotNull Player pPlayer) {
-        return stillValid(this.levelAccess, pPlayer, AMETHYST_FILTER_BLOCK.get());
+        return stillValid(this.levelAccess, pPlayer, TEPHRA_FILTER_BLOCK.get());
     }
 
-    public AmethystFilterEntity getBlockEntity() {
+    public TephraFilterEntity getBlockEntity() {
         return this.blockEntity;
     }
 

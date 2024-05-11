@@ -4,12 +4,16 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FILTER_MENU
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_MENU;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FILTER_MENU;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_MENU;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FILTER_MENU;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_MENU;
 
 import com.N2H4.arcanerefraction.ArcaneRefractionMod;
 import com.N2H4.arcanerefraction.client.screen.AmethystFilterScreen;
 import com.N2H4.arcanerefraction.client.screen.AmethystFocusScreen;
 import com.N2H4.arcanerefraction.client.screen.RegolithFilterScreen;
 import com.N2H4.arcanerefraction.client.screen.RegolithFocusScreen;
+import com.N2H4.arcanerefraction.client.screen.TephraFilterScreen;
+import com.N2H4.arcanerefraction.client.screen.TephraFocusScreen;
 
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.neoforged.api.distmarker.Dist;
@@ -21,12 +25,15 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 public class ClientModHandler 
 {
     @SubscribeEvent
+    @SuppressWarnings("deprecation")
     public static void clientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(AMETHYST_FOCUS_MENU.get(), AmethystFocusScreen::new);
             MenuScreens.register(AMETHYST_FILTER_MENU.get(), AmethystFilterScreen::new);
             MenuScreens.register(REGOLITH_FOCUS_MENU.get(), RegolithFocusScreen::new);
             MenuScreens.register(REGOLITH_FILTER_MENU.get(), RegolithFilterScreen::new);
+            MenuScreens.register(TEPHRA_FOCUS_MENU.get(), TephraFocusScreen::new);
+            MenuScreens.register(TEPHRA_FILTER_MENU.get(), TephraFilterScreen::new);
         });
     }
 }

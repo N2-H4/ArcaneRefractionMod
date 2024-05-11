@@ -8,13 +8,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.NeoForgeConfig.Server;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-
-import java.util.Collections;
-import java.util.List;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

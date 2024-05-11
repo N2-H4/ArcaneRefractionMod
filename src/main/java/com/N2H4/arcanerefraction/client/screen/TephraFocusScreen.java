@@ -1,6 +1,6 @@
 package com.N2H4.arcanerefraction.client.screen;
 
-import com.N2H4.arcanerefraction.Menu.RegolithFocusMenu;
+import com.N2H4.arcanerefraction.Menu.TephraFocusMenu;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,12 +12,12 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RegolithFocusScreen extends AbstractContainerScreen<RegolithFocusMenu>
+public class TephraFocusScreen extends AbstractContainerScreen<TephraFocusMenu>
 {
     private static final ResourceLocation TEXTURE =
             new ResourceLocation(MODID, "textures/gui/amethyst_focus_gui.png");
 
-    public RegolithFocusScreen(RegolithFocusMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public TephraFocusScreen(TephraFocusMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
 
         this.imageWidth = 176;

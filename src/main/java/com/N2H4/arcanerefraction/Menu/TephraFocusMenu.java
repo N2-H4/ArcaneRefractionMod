@@ -1,12 +1,12 @@
 package com.N2H4.arcanerefraction.Menu;
 
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.LENS_COATING_TAG;
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_BLOCK;
-import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_MENU;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_BLOCK;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_MENU;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.N2H4.arcanerefraction.BlockEntity.RegolithFocusEntity;
+import com.N2H4.arcanerefraction.BlockEntity.TephraFocusEntity;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -20,19 +20,19 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class RegolithFocusMenu extends AbstractContainerMenu 
+public class TephraFocusMenu extends AbstractContainerMenu 
 {
-    private final RegolithFocusEntity blockEntity;
+    private final TephraFocusEntity blockEntity;
     private final ContainerLevelAccess levelAccess;
 
     // Client Constructor
-    public RegolithFocusMenu(int containerId, Inventory playerInv, FriendlyByteBuf additionalData) {
+    public TephraFocusMenu(int containerId, Inventory playerInv, FriendlyByteBuf additionalData) {
         this(containerId, playerInv, playerInv.player.level().getBlockEntity(additionalData.readBlockPos()));
     }
     // Server Constructor
-    public RegolithFocusMenu(int containerId, Inventory playerInv, BlockEntity blockEntity) {
-        super(REGOLITH_FOCUS_MENU.get(), containerId);
-        if(blockEntity instanceof RegolithFocusEntity be) {
+    public TephraFocusMenu(int containerId, Inventory playerInv, BlockEntity blockEntity) {
+        super(TEPHRA_FOCUS_MENU.get(), containerId);
+        if(blockEntity instanceof TephraFocusEntity be) {
             this.blockEntity = be;
         } else {
             throw new IllegalStateException("Incorrect block entity class (%s) passed into menu"
@@ -46,7 +46,7 @@ public class RegolithFocusMenu extends AbstractContainerMenu
         createBlockEntityInventory(be);
     }
 
-    private void createBlockEntityInventory(RegolithFocusEntity be) {
+    private void createBlockEntityInventory(TephraFocusEntity be) {
 
         ItemStackHandler inv=be.getOptional().get();
         super.addSlot(new FocusSlot(inv,0,80,11));
@@ -135,10 +135,10 @@ public class RegolithFocusMenu extends AbstractContainerMenu
 
     @Override
     public boolean stillValid(@NotNull Player pPlayer) {
-        return stillValid(this.levelAccess, pPlayer, REGOLITH_FOCUS_BLOCK.get());
+        return stillValid(this.levelAccess, pPlayer, TEPHRA_FOCUS_BLOCK.get());
     }
 
-    public RegolithFocusEntity getBlockEntity() {
+    public TephraFocusEntity getBlockEntity() {
         return this.blockEntity;
     }
 

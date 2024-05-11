@@ -1,7 +1,5 @@
 package com.N2H4.arcanerefraction.client.screen;
 
-import com.N2H4.arcanerefraction.Menu.RegolithFocusMenu;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -12,12 +10,14 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RegolithFocusScreen extends AbstractContainerScreen<RegolithFocusMenu>
+import com.N2H4.arcanerefraction.Menu.TephraFilterMenu;
+
+public class TephraFilterScreen extends AbstractContainerScreen<TephraFilterMenu>
 {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(MODID, "textures/gui/amethyst_focus_gui.png");
+            new ResourceLocation(MODID, "textures/gui/amethyst_filter_gui.png");
 
-    public RegolithFocusScreen(RegolithFocusMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public TephraFilterScreen(TephraFilterMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
 
         this.imageWidth = 176;

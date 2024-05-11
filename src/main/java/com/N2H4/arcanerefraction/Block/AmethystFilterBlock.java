@@ -11,9 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -23,7 +21,6 @@ import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.neoforged.neoforge.items.ItemStackHandler;
 
 
 public class AmethystFilterBlock extends HalfTransparentBlock implements EntityBlock, ILensPart 
@@ -72,6 +69,7 @@ public class AmethystFilterBlock extends HalfTransparentBlock implements EntityB
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onRemove(@NonNls BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
         super.onRemove(state, level, pos, newState, isMoving);
     }

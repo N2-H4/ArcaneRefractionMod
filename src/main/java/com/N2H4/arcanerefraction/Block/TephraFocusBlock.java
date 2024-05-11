@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.N2H4.arcanerefraction.BlockEntity.RegolithFocusEntity;
+import com.N2H4.arcanerefraction.BlockEntity.TephraFocusEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,29 +22,29 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
-public class RegolithFocusBlock extends AmethystFocusBlock 
+public class TephraFocusBlock extends AmethystFocusBlock 
 {
-    public RegolithFocusBlock()
+    public TephraFocusBlock()
     {
         super();
     }
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new RegolithFocusEntity(pos, state);
+        return new TephraFocusEntity(pos, state);
     }
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide) {
                 return (lvl, pos, st, blockEntity) -> {
-                    if (blockEntity instanceof RegolithFocusEntity be) {
+                    if (blockEntity instanceof TephraFocusEntity be) {
                         be.tickServer();
                     }
                 };
         } else {
             return (lvl, pos, st, blockEntity) -> {
-                if (blockEntity instanceof RegolithFocusEntity be) {
+                if (blockEntity instanceof TephraFocusEntity be) {
                     be.tickServer();
                 }
             };
@@ -61,15 +61,15 @@ public class RegolithFocusBlock extends AmethystFocusBlock
         if (pHand == InteractionHand.MAIN_HAND && pPlayer.isHolding(Items.BRUSH))
         {
             BlockEntity tile = pLevel.getBlockEntity(pPos);
-            ((RegolithFocusEntity)tile).interact();
+            ((TephraFocusEntity)tile).interact();
             return InteractionResult.SUCCESS;
         }
         else
         {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof RegolithFocusEntity && pPlayer instanceof ServerPlayer) 
+            if (blockentity instanceof TephraFocusEntity && pPlayer instanceof ServerPlayer) 
             {
-                pPlayer.openMenu((RegolithFocusEntity)blockentity,pPos);
+                pPlayer.openMenu((TephraFocusEntity)blockentity,pPos);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -81,7 +81,7 @@ public class RegolithFocusBlock extends AmethystFocusBlock
     public void onRemove(@Nonnull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
         if (!level.isClientSide()) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof RegolithFocusEntity blockEntity) {
+            if (be instanceof TephraFocusEntity blockEntity) {
                 ItemStackHandler inventory = blockEntity.getInventory();
                 for (int index = 0; index < inventory.getSlots(); index++) {
                     ItemStack stack = inventory.getStackInSlot(index);
