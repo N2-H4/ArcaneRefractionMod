@@ -120,7 +120,7 @@ public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBl
     @Override
     @SuppressWarnings("deprecation")
     public void onRemove(@Nonnull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
-        if (!level.isClientSide()) {
+        if (!level.isClientSide() && newState.getBlock()!=state.getBlock()) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof AmethystFocusEntity blockEntity) {
                 ItemStackHandler inventory = blockEntity.getInventory();
@@ -143,7 +143,7 @@ public class AmethystFocusBlock extends HalfTransparentBlock implements EntityBl
             //BlockEntity tile = pLevel.getBlockEntity(pPos);
             if(previouslyPowered != pLevel.hasNeighborSignal(pPos))
             {
-                pLevel.setBlock(pPos, pState.cycle(BlockStateProperties.POWERED), 2 | 16);
+                pLevel.setBlock(pPos, pState.cycle(BlockStateProperties.POWERED), 2 | 16 | 32);
             }
         }
     }

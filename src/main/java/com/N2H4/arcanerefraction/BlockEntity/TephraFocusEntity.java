@@ -21,6 +21,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class TephraFocusEntity extends AmethystFocusEntity
@@ -35,15 +36,15 @@ public class TephraFocusEntity extends AmethystFocusEntity
     {
         if(level.isClientSide())
         {
-            ray_cooldown++;
-            if(is_formed && sky_access && ray_cooldown>120)
+            ray_timer++;
+            if(is_formed && !this.getBlockState().getValue(BlockStateProperties.POWERED) && sky_access && ray_timer>ray_cooldown)
             {
-                ray_cooldown=0;
+                ray_timer=0;
                 spawnParticles();
             }
             return;
         }
-        if (!level.isClientSide() && is_formed)
+        if (!level.isClientSide() && is_formed && !this.getBlockState().getValue(BlockStateProperties.POWERED))
         {
             timer++;
             timer2++;
@@ -58,7 +59,7 @@ public class TephraFocusEntity extends AmethystFocusEntity
                 scanUnder();
                 this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            if(sound_timer>sound_cooldown)
+            if(sound_timer>sound_cooldown && sky_access)
             {
                 sound_timer=0;
                 level.playSound(null, worldPosition, LENS_SOUND.get(), SoundSource.BLOCKS,0.4f,1.0f);

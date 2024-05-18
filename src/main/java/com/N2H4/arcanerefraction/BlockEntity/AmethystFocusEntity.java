@@ -47,6 +47,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
@@ -80,6 +81,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
 {
     int timer = 300;
     int timer2 = 0;
+    int ray_timer=0;
     int ray_cooldown=120;
     int sound_timer=300;
     int sound_cooldown=900;
@@ -129,15 +131,15 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     {
         if(level.isClientSide())
         {
-            ray_cooldown++;
-            if(is_formed && sky_access && ray_cooldown>120)
+            ray_timer++;
+            if(is_formed && !this.getBlockState().getValue(BlockStateProperties.POWERED) && sky_access && ray_timer>ray_cooldown)
             {
-                ray_cooldown=0;
+                ray_timer=0;
                 spawnParticles();
             }
             return;
         }
-        if (!level.isClientSide() && is_formed)
+        if (!level.isClientSide() && is_formed && !this.getBlockState().getValue(BlockStateProperties.POWERED))
         {
             timer++;
             timer2++;
@@ -152,7 +154,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                 scanUnder();
                 this.level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
             }
-            if(sound_timer>sound_cooldown)
+            if(sound_timer>sound_cooldown && sky_access)
             {
                 sound_timer=0;
                 level.playSound(null, worldPosition, LENS_SOUND.get(), SoundSource.BLOCKS,0.4f,1.0f);

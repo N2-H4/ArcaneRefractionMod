@@ -79,7 +79,7 @@ public class TephraFocusBlock extends AmethystFocusBlock
 
     @Override
     public void onRemove(@Nonnull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
-        if (!level.isClientSide()) {
+        if (!level.isClientSide() && newState.getBlock()!=state.getBlock()) {
             BlockEntity be = level.getBlockEntity(pos);
             if (be instanceof TephraFocusEntity blockEntity) {
                 ItemStackHandler inventory = blockEntity.getInventory();
