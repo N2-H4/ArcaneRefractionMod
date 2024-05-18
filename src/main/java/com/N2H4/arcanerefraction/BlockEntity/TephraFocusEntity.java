@@ -1,6 +1,8 @@
 package com.N2H4.arcanerefraction.BlockEntity;
 
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.AMETHYST_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.LENS_SOUND;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_ENTITY;
 
@@ -144,7 +146,7 @@ public class TephraFocusEntity extends AmethystFocusEntity
                     {
                         pos=worldPosition.offset(i,-depth,j);
                         b=level.getBlockState(pos).getBlock();
-                        if(b!=Blocks.AIR && !(b instanceof ILensPart) && b!=TEPHRA_FOCUS_BLOCK.get())
+                        if(b!=Blocks.AIR && !(b instanceof ILensPart) && b!=AMETHYST_FOCUS_BLOCK.get() && b!=REGOLITH_FOCUS_BLOCK.get() && b!=TEPHRA_FOCUS_BLOCK.get())
                         {
                             processed_positions.add(pos);
                             break;

@@ -37,8 +37,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -47,7 +47,6 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -127,6 +126,7 @@ public class ArcaneRefractionMod
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcanerefraction"))
+            .icon(() -> new ItemStack(DISPERSIVE_AMETHYST_ITEM.get()))
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .displayItems((parameters, output) -> {
                 output.accept(AMETHYST_FOCUS_ITEM.get());
@@ -151,7 +151,7 @@ public class ArcaneRefractionMod
 
     public ArcaneRefractionMod(IEventBus modEventBus)
     {
-        modEventBus.addListener(this::commonSetup);
+        //modEventBus.addListener(this::commonSetup);
 
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
@@ -169,18 +169,13 @@ public class ArcaneRefractionMod
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
+    /*private void commonSetup(final FMLCommonSetupEvent event)
     {
-        // Some common setup code
-        LOGGER.info("HELLO FROM COMMON SETUP");
-
-        if (Config.logDirtBlock)
-            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
-
-        LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
-
-        Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
-    }
+        Config.common_blocks.forEach((block) -> LOGGER.info("Common >> {}", block.toString()));
+        Config.uncommon_blocks.forEach((block) -> LOGGER.info("uncommon >> {}", block.toString()));
+        Config.rare_blocks.forEach((block) -> LOGGER.info("rare >> {}", block.toString()));
+        Config.very_rare_blocks.forEach((block) -> LOGGER.info("veryrare >> {}", block.toString()));
+    }*/
 
     /*private void addCreative(BuildCreativeModeTabContentsEvent event)
     {

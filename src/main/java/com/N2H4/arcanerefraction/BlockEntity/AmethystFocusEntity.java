@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.N2H4.arcanerefraction.Config;
 import com.N2H4.arcanerefraction.Block.AmethystFilterBlock;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.Utils.AmethystFilter;
@@ -81,10 +82,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     int timer2 = 0;
     int ray_cooldown=120;
     int sound_timer=300;
-    int sound_cooldown=300;
+    int sound_cooldown=900;
     boolean wokeUp = false;
     int lens_size = 0;
-    int depth_range=10;
+    int depth_range=15;
     boolean is_formed = false;
     boolean sky_access = false;
     LensMode mode=LensMode.OFF;
@@ -113,6 +114,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         super(AMETHYST_FOCUS_ENTITY.get(), pos, state);
         processed_positions = new ArrayList<BlockPos>();
         filtered_items = new AmethystFilter();
+        depth_range=Config.lens_depth;
     }
 
     protected AmethystFocusEntity(BlockPos pos, BlockState state, BlockEntityType<?> type)
@@ -120,6 +122,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         super(type, pos, state);
         processed_positions = new ArrayList<BlockPos>();
         filtered_items = new AmethystFilter();
+        depth_range=Config.lens_depth;
     }
 
     public void tickServer() 
@@ -138,7 +141,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         {
             timer++;
             timer2++;
-            sound_timer+=level.getRandom().nextInt(5);
+            sound_timer+=level.getRandom().nextInt(7);
             if (timer > 20)
             {
                 timer = 0;
@@ -327,7 +330,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
                     {
                         pos=worldPosition.offset(i,-depth,j);
                         b=level.getBlockState(pos).getBlock();
-                        if(b!=Blocks.AIR && !(b instanceof ILensPart) && b!=AMETHYST_FOCUS_BLOCK.get())
+                        if(b!=Blocks.AIR && !(b instanceof ILensPart) && b!=AMETHYST_FOCUS_BLOCK.get() && b!=REGOLITH_FOCUS_BLOCK.get() && b!=TEPHRA_FOCUS_BLOCK.get())
                         {
                             processed_positions.add(pos);
                             break;
@@ -530,8 +533,16 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             if(bs.getBlock()==Blocks.COBBLESTONE)
             {
                 //list form configuration
-                List<Block> ores=new ArrayList<Block>(List.of(Blocks.COAL_ORE,Blocks.IRON_ORE,Blocks.COPPER_ORE,Blocks.GOLD_ORE,Blocks.REDSTONE_ORE,Blocks.LAPIS_ORE,Blocks.EMERALD_ORE,Blocks.DIAMOND_ORE));
-                Block ore=ores.get(level.getRandom().nextInt(ores.size()));
+                int rarity=level.getRandom().nextInt(100);
+                Block ore=Config.common_blocks.get(level.getRandom().nextInt(Config.common_blocks.size()));
+                if(rarity>50 && rarity<=80)
+                    ore=Config.uncommon_blocks.get(level.getRandom().nextInt(Config.uncommon_blocks.size()));
+                if(rarity>80 && rarity<=95)
+                    ore=Config.rare_blocks.get(level.getRandom().nextInt(Config.rare_blocks.size()));
+                if(rarity>95)
+                    ore=Config.very_rare_blocks.get(level.getRandom().nextInt(Config.very_rare_blocks.size()));
+                //List<Block> ores=new ArrayList<Block>(List.of(Blocks.COAL_ORE,Blocks.IRON_ORE,Blocks.COPPER_ORE,Blocks.GOLD_ORE,Blocks.REDSTONE_ORE,Blocks.LAPIS_ORE,Blocks.EMERALD_ORE,Blocks.DIAMOND_ORE));
+                //Block ore=ores.get(level.getRandom().nextInt(ores.size()));
                 level.setBlock(pos, ore.defaultBlockState(), 2);
                 transform_count--;
                 if(transform_count<=0) 
