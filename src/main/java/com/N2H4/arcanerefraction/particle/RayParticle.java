@@ -19,9 +19,9 @@ import org.joml.Vector3f;
 
 public class RayParticle extends TextureSheetParticle
 {
-    private final Quaternionf rotation = new Quaternionf();
-    private float x_rot=0;
-    private float z_rot=0;
+    protected final Quaternionf rotation = new Quaternionf();
+    protected float x_rot=0;
+    protected float z_rot=0;
 
     protected RayParticle(ClientLevel pLevel, double pX, double pY, double pZ, SpriteSet spriteSet, double pXSpeed, double pYSpeed, double pZSpeed) 
     {
@@ -51,7 +51,7 @@ public class RayParticle extends TextureSheetParticle
         super.tick();
     }
 
-    private void fadeOut() 
+    protected void fadeOut() 
     {
         this.alpha = (-(1/(float)lifetime) * age + 1);
     }

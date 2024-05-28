@@ -122,6 +122,8 @@ public class ArcaneRefractionMod
     public static final TagKey<Item> LENS_COATING_TAG = ItemTags.create(new ResourceLocation("arcanerefraction", "lens_coating"));
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES=DeferredRegister.create(BuiltInRegistries.PARTICLE_TYPE, MODID);
     public static final DeferredHolder<ParticleType<?>,ParticleType<SimpleParticleType>> RAY_PARTICLE=PARTICLE_TYPES.register("ray_particle", () -> new SimpleParticleType(true));
+    public static final DeferredHolder<ParticleType<?>,ParticleType<SimpleParticleType>> REGOLITH_PARTICLE=PARTICLE_TYPES.register("regolith_particle", () -> new SimpleParticleType(true));
+    public static final DeferredHolder<ParticleType<?>,ParticleType<SimpleParticleType>> TEPHRA_PARTICLE=PARTICLE_TYPES.register("tephra_particle", () -> new SimpleParticleType(true));
     public static final DeferredHolder<SoundEvent,SoundEvent> LENS_SOUND = SOUND_EVENTS.register("lens_sound", () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(MODID, "lens_sound")));
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()

@@ -135,7 +135,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             if(is_formed && !this.getBlockState().getValue(BlockStateProperties.POWERED) && sky_access && ray_timer>ray_cooldown)
             {
                 ray_timer=0;
-                spawnParticles();
+                spawnParticles((SimpleParticleType)RAY_PARTICLE.get());
             }
             return;
         }
@@ -263,43 +263,43 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         }
     }
     
-    protected void spawnParticles()
+    protected void spawnParticles(SimpleParticleType type)
     {
         if(lens_size>=1)
         {
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle(type, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
         }
         if(lens_size>=2)
         {
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+1, worldPosition.getY(), worldPosition.getZ()+1, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-1, worldPosition.getY(), worldPosition.getZ()-1, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+1, worldPosition.getY(), worldPosition.getZ()-1, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-1, worldPosition.getY(), worldPosition.getZ()+1, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+1, worldPosition.getY(), worldPosition.getZ()+1, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-1, worldPosition.getY(), worldPosition.getZ()-1, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+1, worldPosition.getY(), worldPosition.getZ()-1, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-1, worldPosition.getY(), worldPosition.getZ()+1, 0, 0, 0);
         }
         if(lens_size>=3)
         {
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle(type, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
         }
         if(lens_size>=4)
         {
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+2, worldPosition.getY(), worldPosition.getZ()-2, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-2, worldPosition.getY(), worldPosition.getZ()+2, 0, 0, 0);
         }
         if(lens_size==5)
         {
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+3, worldPosition.getY(), worldPosition.getZ()+3, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-3, worldPosition.getY(), worldPosition.getZ()-3, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+3, worldPosition.getY(), worldPosition.getZ()-3, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-3, worldPosition.getY(), worldPosition.getZ()+3, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()+5, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX()-5, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()+5, 0, 0, 0);
-            level.addParticle((SimpleParticleType)RAY_PARTICLE.get(), worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()-5, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+3, worldPosition.getY(), worldPosition.getZ()+3, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-3, worldPosition.getY(), worldPosition.getZ()-3, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+3, worldPosition.getY(), worldPosition.getZ()-3, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-3, worldPosition.getY(), worldPosition.getZ()+3, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()+5, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle(type, worldPosition.getX()-5, worldPosition.getY(), worldPosition.getZ(), 0, 0, 0);
+            level.addParticle(type, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()+5, 0, 0, 0);
+            level.addParticle(type, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ()-5, 0, 0, 0);
         }
     }
 

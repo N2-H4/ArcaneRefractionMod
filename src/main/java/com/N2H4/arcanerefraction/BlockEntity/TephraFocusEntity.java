@@ -5,12 +5,14 @@ import static com.N2H4.arcanerefraction.ArcaneRefractionMod.LENS_SOUND;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.REGOLITH_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_BLOCK;
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_FOCUS_ENTITY;
+import static com.N2H4.arcanerefraction.ArcaneRefractionMod.TEPHRA_PARTICLE;
 
 import com.N2H4.arcanerefraction.Block.TephraFilterBlock;
 import com.N2H4.arcanerefraction.Menu.TephraFocusMenu;
 import com.N2H4.arcanerefraction.Utils.ILensPart;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Inventory;
@@ -40,7 +42,7 @@ public class TephraFocusEntity extends AmethystFocusEntity
             if(is_formed && !this.getBlockState().getValue(BlockStateProperties.POWERED) && sky_access && ray_timer>ray_cooldown)
             {
                 ray_timer=0;
-                spawnParticles();
+                spawnParticles((SimpleParticleType)TEPHRA_PARTICLE.get());
             }
             return;
         }
