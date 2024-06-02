@@ -35,7 +35,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -129,7 +128,6 @@ public class ArcaneRefractionMod
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcanerefraction"))
             .icon(() -> new ItemStack(DISPERSIVE_AMETHYST_ITEM.get()))
-            .withTabsBefore(CreativeModeTabs.COMBAT)
             .displayItems((parameters, output) -> {
                 output.accept(AMETHYST_FOCUS_ITEM.get());
                 output.accept(DISPERSIVE_AMETHYST_ITEM.get());

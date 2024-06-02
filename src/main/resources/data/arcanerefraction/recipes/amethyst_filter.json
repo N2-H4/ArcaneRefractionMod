@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "category": "blocks",
+  "ingredient": {
+    "item": "arcanerefraction:dispersive_amethyst"
+  },
+  "result": "arcanerefraction:amethyst_filter",
+  "count": 1
+}
+  

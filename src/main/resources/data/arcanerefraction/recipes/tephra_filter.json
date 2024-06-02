@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "category": "blocks",
+  "ingredient": {
+    "item": "arcanerefraction:dispersive_tephra"
+  },
+  "result": "arcanerefraction:tephra_filter",
+  "count": 1
+}
+  
