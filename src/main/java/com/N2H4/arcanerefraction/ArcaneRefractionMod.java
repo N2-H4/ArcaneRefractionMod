@@ -15,6 +15,7 @@ import com.N2H4.arcanerefraction.BlockEntity.RegolithFilterEntity;
 import com.N2H4.arcanerefraction.BlockEntity.RegolithFocusEntity;
 import com.N2H4.arcanerefraction.BlockEntity.TephraFilterEntity;
 import com.N2H4.arcanerefraction.BlockEntity.TephraFocusEntity;
+import com.N2H4.arcanerefraction.Item.ARGuide;
 import com.N2H4.arcanerefraction.Menu.AmethystFilterMenu;
 import com.N2H4.arcanerefraction.Menu.AmethystFocusMenu;
 import com.N2H4.arcanerefraction.Menu.RegolithFilterMenu;
@@ -103,6 +104,8 @@ public class ArcaneRefractionMod
     public static final DeferredItem<Item> FIRE_CORAL_COATING = ITEMS.registerSimpleItem("fire_coral_coating");
     public static final DeferredItem<Item> COPPER_COATING = ITEMS.registerSimpleItem("copper_coating");
     public static final DeferredItem<Item> PURPUR_COATING = ITEMS.registerSimpleItem("purpur_coating");
+    //guide
+    public static final DeferredItem<Item> AR_GUIDE=ITEMS.registerItem("ar_guide", ARGuide::new);
     //MENUS
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFocusMenu>> AMETHYST_FOCUS_MENU = MENUS.register("amethyst_focus_menu",() -> IMenuTypeExtension.create(AmethystFocusMenu::new));
     public static final DeferredHolder<MenuType<?>,MenuType<AmethystFilterMenu>> AMETHYST_FILTER_MENU = MENUS.register("amethyst_filter_menu",() -> IMenuTypeExtension.create(AmethystFilterMenu::new));
@@ -146,6 +149,7 @@ public class ArcaneRefractionMod
                 output.accept(FIRE_CORAL_COATING.get());
                 output.accept(COPPER_COATING.get());
                 output.accept(PURPUR_COATING.get());
+                output.accept(AR_GUIDE.get());
             }).build());
 
 
