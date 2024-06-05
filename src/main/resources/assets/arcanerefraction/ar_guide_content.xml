@@ -1,0 +1,47 @@
+<?xml version = "1.0"?>
+<content>
+   <intro>
+      <page>
+         <left>
+            <line>Arcane Refraction adds mulitblock</line>
+            <line>structures called Lenses</line>
+         </left>
+      </page>
+   </intro>
+
+   <basics>
+      <page>
+         <left>
+         </left>
+         <right>
+         </right>
+      </page>
+   </basics>
+   
+   <sizes>
+      <page>
+         <left>
+         </left>
+         <right>
+         </right>
+      </page>
+   </sizes>
+   
+   <effects>
+      <page>
+         <left>
+         </left>
+         <right>
+         </right>
+      </page>
+   </effects>
+
+   <transformations>
+      <page>
+         <left>
+         </left>
+         <right>
+         </right>
+      </page>
+   </transformations>
+</content>
