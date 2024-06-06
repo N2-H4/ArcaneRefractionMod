@@ -3,8 +3,13 @@
    <intro>
       <page>
          <left>
-            <line>Arcane Refraction adds mulitblock</line>
-            <line>structures called Lenses</line>
+            <line>Arcane Refraction allows creation</line>
+            <line>of mulitblock structures called</line>
+            <line>lenses. Active lens creates </line>
+            <line>powerful AOE effects below it.</line>
+            <line>Thier purpose is to help with</line>
+            <line>farming and boost resource</line>
+            <line>generation.</line>
          </left>
       </page>
    </intro>
@@ -12,8 +17,18 @@
    <basics>
       <page>
          <left>
+            <line>basics left </line>
          </left>
          <right>
+            <line>basics right </line>
+         </right>
+      </page>
+      <page>
+         <left>
+            <line>basics left 2 </line>
+         </left>
+         <right>
+            <line>basics right 2 </line>
          </right>
       </page>
    </basics>
@@ -21,8 +36,10 @@
    <sizes>
       <page>
          <left>
+            <line>sizes left </line>
          </left>
          <right>
+            <line>sizes right </line>
          </right>
       </page>
    </sizes>
@@ -30,8 +47,26 @@
    <effects>
       <page>
          <left>
+            <line>effects left </line>
          </left>
          <right>
+            <line>effects right </line>
+         </right>
+      </page>
+      <page>
+         <left>
+            <line>effects left 2</line>
+         </left>
+         <right>
+            <line>effects right 2</line>
+         </right>
+      </page>
+      <page>
+         <left>
+            <line>effects left 3</line>
+         </left>
+         <right>
+            <line>effects right 3</line>
          </right>
       </page>
    </effects>
@@ -39,8 +74,10 @@
    <transformations>
       <page>
          <left>
+            <line>transforamtions left </line>
          </left>
          <right>
+            <line>transformations right </line>
          </right>
       </page>
    </transformations>
