@@ -3,8 +3,11 @@ package com.N2H4.arcanerefraction.client.screen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 
@@ -18,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public class ARGuideScreen extends Screen 
 {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MODID, "textures/gui/ar_guide_bg4.png");
+    private static final ResourceLocation ASSETS = new ResourceLocation(MODID, "textures/gui/ar_guide_assets.png");
     private PageButton forwardButton;
     private PageButton backButton;
     private PageButton startButton;
@@ -51,6 +55,9 @@ public class ARGuideScreen extends Screen
     public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         drawPage(pGuiGraphics);
+        //drawImage(pGuiGraphics, ASSETS, 0, 90, 0, 0, 10, 10);
+        //ItemStack itemstack= new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation("minecraft:stone")));
+        //pGuiGraphics.renderItem(itemstack, 50, 50, 0);
     }
 
     private void setStartPage()
@@ -93,7 +100,13 @@ public class ARGuideScreen extends Screen
         List<String> lines=content.getChapterPage(currenChapter+"Left", currentPage);
         for (String line : lines)
         {
-            drawSmallString(pGuiGraphics, line,198, lineOffset);
+            if(line.length()>=1 && line.charAt(0)=='@')
+            {
+                String[] args=line.split("@",7);
+                drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]));
+            }
+            else
+                drawSmallString(pGuiGraphics, line,198, lineOffset);
             lineOffset+=10;
         }
         //draw right
@@ -101,9 +114,26 @@ public class ARGuideScreen extends Screen
         lines=content.getChapterPage(currenChapter+"Right", currentPage);
         for (String line : lines)
         {
-            drawSmallString(pGuiGraphics, line,-20, lineOffset);
+            if(line.length()>=1 && line.charAt(0)=='@')
+            {
+                String[] args=line.split("@",7);
+                drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]));
+            }
+            else
+                drawSmallString(pGuiGraphics, line,-20, lineOffset);
             lineOffset+=10;
         }
+    }
+
+    private void drawImage(GuiGraphics pGuiGraphics, ResourceLocation resource,int x, int y, int xOffset, int yOffset, int width, int height)
+    {
+        var pose = pGuiGraphics.pose();
+        pose.pushPose();
+        {
+            pose.scale(2, 2, 2);
+            pGuiGraphics.blit(resource, (int)((this.width*0.5f)/2)-x, y, xOffset, yOffset, width, height);
+        }
+        pose.popPose();
     }
 
     private void drawSmallString(GuiGraphics pGuiGraphics, String line,int position, int lineOffset)
@@ -155,7 +185,14 @@ public class ARGuideScreen extends Screen
             {
                 this.forwardButton.visible=false;
             }
-            this.startButton.visible=true;
+            if(currentPage!=0)
+            {
+                this.backButton.visible=true;
+            }
+            else
+            {
+                this.backButton.visible=false;
+            }
             this.basicsButton.visible=false;
             this.lensSizesButton.visible=false;
             this.effectsButton.visible=false;

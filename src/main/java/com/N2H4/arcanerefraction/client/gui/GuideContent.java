@@ -23,7 +23,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 public class GuideContent 
 {
     private ResourceManager manager=Minecraft.getInstance().getResourceManager();
-    private static final ResourceLocation location = new ResourceLocation(MODID, "ar_guide_content.xml");
+    private static final ResourceLocation LOCATION = new ResourceLocation(MODID, "ar_guide_content.xml");
 
     private Dictionary<String, List<List<String>>> content;
 
@@ -57,7 +57,7 @@ public class GuideContent
         Resource bookResource;
         try
         {
-            bookResource = manager.getResourceOrThrow(location);
+            bookResource = manager.getResourceOrThrow(LOCATION);
         }
         catch (IOException e)
         {

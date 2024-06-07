@@ -94,6 +94,8 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
     List<BlockPos> processed_positions;
     AmethystFilter filtered_items;
 
+    //TODO effects streangth in config
+
     protected final Lazy<ItemStackHandler> optional = Lazy.of(() -> this.inventory);
     
     protected final ItemStackHandler inventory = new ItemStackHandler(25)

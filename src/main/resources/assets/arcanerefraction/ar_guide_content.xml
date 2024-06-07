@@ -36,10 +36,39 @@
    <sizes>
       <page>
          <left>
-            <line>sizes left </line>
+            <line>                   Size 1</line>
+            <line>@37@40@0@0@10@10</line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line>                   Size 2</line>
+            <line>@40@63@0@10@16@18</line>
          </left>
          <right>
-            <line>sizes right </line>
+            <line>                Size 3</line>
+            <line>@-18@37@0@30@23@23</line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line>                Size 4</line>
+            <line>@-16@64@0@52@28@30</line>
+         </right>
+      </page>
+      <page>
+         <left>
+            <line>                   Size 5</line>
+            <line>@52@40@0@83@40@42</line>
+         </left>
+         <right>
          </right>
       </page>
    </sizes>

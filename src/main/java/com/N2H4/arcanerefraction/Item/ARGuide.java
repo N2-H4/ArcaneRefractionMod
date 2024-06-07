@@ -13,6 +13,7 @@ import com.N2H4.arcanerefraction.client.screen.ARGuideScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.client.gui.screens.inventory.BookEditScreen;
+import net.minecraft.client.gui.screens.inventory.ContainerScreen;
 import net.minecraft.world.level.Level;
 
 public class ARGuide extends Item {
