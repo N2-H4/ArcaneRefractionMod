@@ -17,18 +17,87 @@
    <basics>
       <page>
          <left>
-            <line>basics left </line>
+            <line>A lens is a flat, circular multi-</line>
+            <line>block. Center of the structure</line>
+            <line>always must be a Focus block.</line>
+            <line>Rest of the lens is made of</line>
+            <line>Dispersive blocks of the</line>
+            <line>same type as Focus. Any</line>
+            <line>Dispersive block can be replaced</line>
+            <line>with a Filter block if an effect</line>
+            <line>requires it.</line>
+            <line></line>
+            <line>Amethyst Focus can be crafted with</line>
+            <line>an Amethyst Block, Spyglass, </line>
+            <line>2 blocks of Blue Ice, 3 glowing</line>
+            <line>ink sacs and 2 nautilus shells.</line>
+            <line>#-85#150#minecraft:blue_ice#minecraft:spyglass#minecraft:blue_ice#minecraft:glow_ink_sac#minecraft:amethyst_block#minecraft:glow_ink_sac#minecraft:nautilus_shell#minecraft:glow_ink_sac#minecraft:nautilus_shell</line>
          </left>
          <right>
-            <line>basics right </line>
+            <line>Dispersive Amethyst can be</line>
+            <line>crafted with 4 amethyst blocks,</line>
+            <line>2 soul soil blocks, 2 dripstone</line>
+            <line>blocks, and a fire charge.</line>
+            <line>#38#90#minecraft:soul_soil#minecraft:amethyst_block#minecraft:soul_soil#minecraft:amethyst_block#minecraft:fire_charge#minecraft:amethyst_block#minecraft:dripstone_block#minecraft:amethyst_block#minecraft:dripstone_block</line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line></line>
+            <line>Amethyst Filter can be crafted</line>
+            <line>from Dispersive Amethyst with</line>
+            <line>use of stonecutter.</line>
+            <line></line>
+            <line>A lens can be one of 5 sizes.</line>
+            <line>Check 'Lens Sizes' chapter for</line>
+            <line>diagrams.</line>
          </right>
       </page>
       <page>
          <left>
-            <line>basics left 2 </line>
+            <line>Before a constructed lens can</line>
+            <line>be activated, Focus must be</line>
+            <line>filled with one type of coating,</line>
+            <line>which decides what effect lens</line>
+            <line>will be spreading. To coat a</line>
+            <line>lens of size n, the n-th row</line>
+            <line>from top as well as all previous</line>
+            <line>rows inside Focus GUI must be</line>
+            <line>completely filled with single</line>
+            <line>type of coating. When the lens</line>
+            <line>is ready right-click the Focus</line>
+            <line>while holding a Brush to </line>
+            <line>activate it.</line>
+            <line></line>
+            <line>Entire surface of a lens requires</line>
+            <line>sky access in order to work.</line>
+            <line>Lenses do not block sky access</line>
+            <line>therefore can be stacked on top</line>
+            <line>of eachother.</line>
          </left>
          <right>
-            <line>basics right 2 </line>
+            <line>A lens affects all blocks</line>
+            <line>underneath unless blocked</line>
+            <line>by a block that can not be</line>
+            <line>affected, up to vertical</line>
+            <line>range of 15 blocks. Range can</line>
+            <line>be changed in mods configuration.</line>
+            <line></line>
+            <line>Amethyst lenses have diffrent</line>
+            <line>effects during day than night.</line>
+            <line>Any lens can be turned off</line>
+            <line>with redstone signal.</line>
+            <line>Therefore daylight sensor can</line>
+            <line>be used to control effects of</line>
+            <line>amethyst lenses.</line>
+            <line></line>
+            <line>Amethyst lens parts can be</line>
+            <line>transformed into Regolith or</line>
+            <line>Tephra parts.</line>
+            <line>Check 'Transformations' chapter</line>
+            <line>for more infromation.</line>
          </right>
       </page>
    </basics>
@@ -76,26 +145,95 @@
    <effects>
       <page>
          <left>
-            <line>effects left </line>
+            <line>Honeycomb</line>
+            <line></line>
+            <line>Increases plant growth rate</line>
+            <line>during day.</line>
+            <line>Harvests and replants plants</line>
+            <line>during night. Drops harvested</line>
+            <line>items on the floor.</line>
+            <line></line>
+            <line>Honeycomb coating can be</line>
+            <line>crafted from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 honeycombs.</line>
+            <line>#-85#140#minecraft:amethyst_shard#minecraft:honeycomb#minecraft:amethyst_shard#minecraft:honeycomb#minecraft:blue_ice#minecraft:honeycomb#minecraft:amethyst_shard#minecraft:honeycomb#minecraft:amethyst_shard</line>
          </left>
          <right>
-            <line>effects right </line>
+            <line>Sculk</line>
+            <line></line>
+            <line>Spawns hostile mobs during day.</line>
+            <line>Spawns passive mobs during night.</line>
+            <line></line>
+            <line>Sculk coating can be crafted</line>
+            <line>from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 sculk.</line>
+            <line>#38#125#minecraft:amethyst_shard#minecraft:sculk#minecraft:amethyst_shard#minecraft:sculk#minecraft:blue_ice#minecraft:sculk#minecraft:amethyst_shard#minecraft:sculk#minecraft:amethyst_shard</line>
          </right>
       </page>
       <page>
          <left>
-            <line>effects left 2</line>
+            <line>Froglight</line>
+            <line></line>
+            <line>Heals cretures during day.</line>
+            <line>Damages creatures during night.</line>
+            <line></line>
+            <line>Froglight coating can be crafted</line>
+            <line>from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 verdant froglight.</line>
+            <line>#-85#125#minecraft:amethyst_shard#minecraft:verdant_froglight#minecraft:amethyst_shard#minecraft:verdant_froglight#minecraft:blue_ice#minecraft:verdant_froglight#minecraft:amethyst_shard#minecraft:verdant_froglight#minecraft:amethyst_shard</line>
          </left>
          <right>
-            <line>effects right 2</line>
+            <line>Fire Coral</line>
+            <line></line>
+            <line>Turns cobblestone into lava</line>
+            <line>during day.</line>
+            <line>Turns water into snow and</line>
+            <line>ice during night.</line>
+            <line></line>
+            <line>Fire Coral coating can be</line>
+            <line>crafted from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 fire coral blocks.</line>
+            <line>#38#135#minecraft:amethyst_shard#minecraft:fire_coral_block#minecraft:amethyst_shard#minecraft:fire_coral_block#minecraft:blue_ice#minecraft:fire_coral_block#minecraft:amethyst_shard#minecraft:fire_coral_block#minecraft:amethyst_shard</line>
          </right>
       </page>
       <page>
          <left>
-            <line>effects left 3</line>
+            <line>Crying Obsidian</line>
+            <line></line>
+            <line>Mines blocks that are inside at</line>
+            <line>least one of lenses Filter blocks</line>
+            <line>and can be mined with</line>
+            <line>a diamond pickaxe. During day</line>
+            <line>blocks are mined without</line>
+            <line>silk touch. During night blocks</line>
+            <line>are mined with silk touch.</line>
+            <line></line>
+            <line>Crying Obsidian coating can be</line>
+            <line>crafted from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 crying obsidian blocks.</line>
+            <line>#-85#150#minecraft:amethyst_shard#minecraft:crying_obsidian#minecraft:amethyst_shard#minecraft:crying_obsidian#minecraft:blue_ice#minecraft:crying_obsidian#minecraft:amethyst_shard#minecraft:crying_obsidian#minecraft:amethyst_shard</line>
          </left>
          <right>
-            <line>effects right 3</line>
+            <line>Blackstone</line>
+            <line></line>
+            <line>Makes animals drop items from</line>
+            <line>thier loot table on the ground</line>
+            <line>without killing them during day.</line>
+            <line>Turns cobblestone into ores</line>
+            <line>during night. Ores and thier</line>
+            <line>rarity can be changed in</line>
+            <line>mods configuration.</line>
+            <line></line>
+            <line>Blackstone coating can be</line>
+            <line>crafted from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 gilded blackstone blocks.</line>
+            <line>#38#150#minecraft:amethyst_shard#minecraft:gilded_blackstone#minecraft:amethyst_shard#minecraft:gilded_blackstone#minecraft:blue_ice#minecraft:gilded_blackstone#minecraft:amethyst_shard#minecraft:gilded_blackstone#minecraft:amethyst_shard</line>
          </right>
       </page>
    </effects>

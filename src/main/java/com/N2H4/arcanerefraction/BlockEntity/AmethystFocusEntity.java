@@ -371,6 +371,10 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
             {
                 level.scheduleTick(pos, b, 1);
 		        b.randomTick(bs, (ServerLevel)level, pos, level.random);
+                level.scheduleTick(pos, b, 1);
+		        b.randomTick(bs, (ServerLevel)level, pos, level.random);
+                level.scheduleTick(pos, b, 1);
+		        b.randomTick(bs, (ServerLevel)level, pos, level.random);
 		        level.levelEvent(2005, pos, 1);
 
             }
@@ -517,7 +521,7 @@ public class AmethystFocusEntity extends BlockEntity implements MenuProvider
         Vec3 topCorner = this.worldPosition.offset(size, 0, size).getCenter();
         Vec3 bottomCorner = this.worldPosition.offset(-size, -depth_range, -size).getCenter();
         AABB box = new AABB(topCorner, bottomCorner);
-        List<Entity> entities =level.getEntities(null, box);
+        List<Entity> entities = level.getEntities(null, box);
         for (Entity entity : entities) 
         {
             if(entity instanceof Animal)

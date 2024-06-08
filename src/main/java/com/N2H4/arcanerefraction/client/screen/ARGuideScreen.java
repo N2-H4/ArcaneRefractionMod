@@ -7,10 +7,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-
 import static com.N2H4.arcanerefraction.ArcaneRefractionMod.MODID;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import com.N2H4.arcanerefraction.client.gui.ChapterButton;
@@ -33,6 +33,7 @@ public class ARGuideScreen extends Screen
     private String currenChapter;
     private int currentPage;
     private boolean firstTimeOpened;
+    private Dictionary<String,ItemStack> chachedItemStacks;
 
     public ARGuideScreen()
     {
@@ -42,6 +43,7 @@ public class ARGuideScreen extends Screen
         content=new GuideContent();
         content.loadGuide();
         firstTimeOpened=true;
+        chachedItemStacks=new Hashtable<>();
     }
 
 
@@ -55,9 +57,6 @@ public class ARGuideScreen extends Screen
     public void render(@NotNull GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(pGuiGraphics, pMouseX, pMouseY, pPartialTick);
         drawPage(pGuiGraphics);
-        //drawImage(pGuiGraphics, ASSETS, 0, 90, 0, 0, 10, 10);
-        //ItemStack itemstack= new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation("minecraft:stone")));
-        //pGuiGraphics.renderItem(itemstack, 50, 50, 0);
     }
 
     private void setStartPage()
@@ -105,6 +104,10 @@ public class ARGuideScreen extends Screen
                 String[] args=line.split("@",7);
                 drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]));
             }
+            else if(line.length()>=1 && line.charAt(0)=='#')
+            {
+                drawRecipe(pGuiGraphics, line, ASSETS);
+            }
             else
                 drawSmallString(pGuiGraphics, line,198, lineOffset);
             lineOffset+=10;
@@ -119,6 +122,10 @@ public class ARGuideScreen extends Screen
                 String[] args=line.split("@",7);
                 drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]));
             }
+            else if(line.length()>=1 && line.charAt(0)=='#')
+            {
+                drawRecipe(pGuiGraphics, line, ASSETS);
+            }
             else
                 drawSmallString(pGuiGraphics, line,-20, lineOffset);
             lineOffset+=10;
@@ -132,6 +139,87 @@ public class ARGuideScreen extends Screen
         {
             pose.scale(2, 2, 2);
             pGuiGraphics.blit(resource, (int)((this.width*0.5f)/2)-x, y, xOffset, yOffset, width, height);
+        }
+        pose.popPose();
+    }
+
+    private void drawRecipe(GuiGraphics pGuiGraphics, String line, ResourceLocation resource)
+    {
+        String[] args=line.split("#",12);
+        int x = Integer.valueOf(args[1]);
+        int y = Integer.valueOf(args[2]);
+        var pose = pGuiGraphics.pose();
+        pose.pushPose();
+        {
+            pose.scale(0.36f, 0.36f, 0.36f);
+            pose.translate(x/0.36f, y/0.36, 0);
+           // pGuiGraphics.blit(resource, (int)(((this.width*0.5f)-x)/0.36f), y, 49, 3, 111, 109);
+           pGuiGraphics.blit(resource, (int)((this.width*0.5f)/0.36f), 0, 49, 3, 111, 109);
+        }
+        pose.popPose();
+        pose.pushPose();
+        {
+            //int bgOffset=(int)((this.width*0.5f)/0.36f)-x;
+            pose.scale(0.68f, 0.68f, 0.68f);
+            pose.translate(x/0.68, y/0.68, 0);
+            //pGuiGraphics.renderItem(new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation("minecraft:stone"))), (int)((this.width*0.5f)/0.68f), 0);
+            //top row
+            if(args[3].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[3])==null)
+                    chachedItemStacks.put(args[3], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[3]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[3]), (int)((this.width*0.5f)/0.68f)+3, 2);
+            }
+            if(args[4].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[4])==null)
+                    chachedItemStacks.put(args[4], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[4]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[4]), (int)((this.width*0.5f)/0.68f)+22, 2);
+            }
+            if(args[5].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[5])==null)
+                    chachedItemStacks.put(args[5], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[5]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[5]), (int)((this.width*0.5f)/0.68f)+41, 2);
+            }
+            //mid row
+            if(args[6].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[6])==null)
+                    chachedItemStacks.put(args[6], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[6]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[6]), (int)((this.width*0.5f)/0.68f)+3, 21);
+            }
+            if(args[7].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[7])==null)
+                    chachedItemStacks.put(args[7], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[7]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[7]), (int)((this.width*0.5f)/0.68f)+22, 21);
+            }
+            if(args[8].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[8])==null)
+                    chachedItemStacks.put(args[8], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[8]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[8]), (int)((this.width*0.5f)/0.68f)+41, 21);
+            }
+            //bot row
+            if(args[9].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[9])==null)
+                    chachedItemStacks.put(args[9], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[9]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[9]), (int)((this.width*0.5f)/0.68f)+3, 40);
+            }
+            if(args[10].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[10])==null)
+                    chachedItemStacks.put(args[10], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[10]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[10]), (int)((this.width*0.5f)/0.68f)+22, 40);
+            }
+            if(args[11].charAt(0)!='!')
+            {
+                if(chachedItemStacks.get(args[11])==null)
+                    chachedItemStacks.put(args[11], new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(args[11]))));
+                pGuiGraphics.renderItem(chachedItemStacks.get(args[11]), (int)((this.width*0.5f)/0.68f)+41, 40);
+            }
         }
         pose.popPose();
     }
