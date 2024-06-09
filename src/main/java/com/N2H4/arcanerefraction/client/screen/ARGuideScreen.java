@@ -101,8 +101,8 @@ public class ARGuideScreen extends Screen
         {
             if(line.length()>=1 && line.charAt(0)=='@')
             {
-                String[] args=line.split("@",7);
-                drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]));
+                String[] args=line.split("@",8);
+                drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]),Float.valueOf(args[7]));
             }
             else if(line.length()>=1 && line.charAt(0)=='#')
             {
@@ -119,8 +119,8 @@ public class ARGuideScreen extends Screen
         {
             if(line.length()>=1 && line.charAt(0)=='@')
             {
-                String[] args=line.split("@",7);
-                drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]));
+                String[] args=line.split("@",8);
+                drawImage(pGuiGraphics, ASSETS, Integer.valueOf(args[1]), Integer.valueOf(args[2]), Integer.valueOf(args[3]), Integer.valueOf(args[4]), Integer.valueOf(args[5]), Integer.valueOf(args[6]),Float.valueOf(args[7]));
             }
             else if(line.length()>=1 && line.charAt(0)=='#')
             {
@@ -132,13 +132,13 @@ public class ARGuideScreen extends Screen
         }
     }
 
-    private void drawImage(GuiGraphics pGuiGraphics, ResourceLocation resource,int x, int y, int xOffset, int yOffset, int width, int height)
+    private void drawImage(GuiGraphics pGuiGraphics, ResourceLocation resource,int x, int y, int xOffset, int yOffset, int width, int height,float scale)
     {
         var pose = pGuiGraphics.pose();
         pose.pushPose();
         {
-            pose.scale(2, 2, 2);
-            pGuiGraphics.blit(resource, (int)((this.width*0.5f)/2)-x, y, xOffset, yOffset, width, height);
+            pose.scale(scale, scale, scale);
+            pGuiGraphics.blit(resource, (int)((this.width*0.5f)/scale)-x, y, xOffset, yOffset, width, height);
         }
         pose.popPose();
     }

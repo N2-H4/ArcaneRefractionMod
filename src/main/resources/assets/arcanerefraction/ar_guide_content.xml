@@ -106,7 +106,7 @@
       <page>
          <left>
             <line>                   Size 1</line>
-            <line>@37@40@0@0@10@10</line>
+            <line>@37@40@0@0@10@10@2</line>
             <line></line>
             <line></line>
             <line></line>
@@ -115,11 +115,11 @@
             <line></line>
             <line></line>
             <line>                   Size 2</line>
-            <line>@40@63@0@10@16@18</line>
+            <line>@40@63@0@10@16@18@2</line>
          </left>
          <right>
             <line>                Size 3</line>
-            <line>@-18@37@0@30@23@23</line>
+            <line>@-18@37@0@30@23@23@2</line>
             <line></line>
             <line></line>
             <line></line>
@@ -129,13 +129,13 @@
             <line></line>
             <line></line>
             <line>                Size 4</line>
-            <line>@-16@64@0@52@28@30</line>
+            <line>@-16@64@0@52@28@30@2</line>
          </right>
       </page>
       <page>
          <left>
             <line>                   Size 5</line>
-            <line>@52@40@0@83@40@42</line>
+            <line>@52@40@0@83@40@42@2</line>
          </left>
          <right>
          </right>
@@ -147,8 +147,8 @@
          <left>
             <line>Honeycomb</line>
             <line></line>
-            <line>Increases plant growth rate</line>
-            <line>during day.</line>
+            <line>Increases plant and budding</line>
+            <line>amethyst growth rate during day.</line>
             <line>Harvests and replants plants</line>
             <line>during night. Drops harvested</line>
             <line>items on the floor.</line>
@@ -236,15 +236,71 @@
             <line>#38#150#minecraft:amethyst_shard#minecraft:gilded_blackstone#minecraft:amethyst_shard#minecraft:gilded_blackstone#minecraft:blue_ice#minecraft:gilded_blackstone#minecraft:amethyst_shard#minecraft:gilded_blackstone#minecraft:amethyst_shard</line>
          </right>
       </page>
+      <page>
+         <left>
+            <line>Copper</line>
+            <line></line>
+            <line>Collects items that are</line>
+            <line>contained inside Filter blocks</line>
+            <line>from under the lens. Every</line>
+            <line>item is teleported right under</line>
+            <line>Filter block that contains it.</line>
+            <line>Same behaviour during</line>
+            <line>day and night.</line>
+            <line></line>
+            <line>Copper coating can be</line>
+            <line>crafted from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 copper ingots.</line>
+            <line>#-85#150#minecraft:amethyst_shard#minecraft:copper_ingot#minecraft:amethyst_shard#minecraft:copper_ingot#minecraft:blue_ice#minecraft:copper_ingot#minecraft:amethyst_shard#minecraft:copper_ingot#minecraft:amethyst_shard</line>
+         </left>
+         <right>
+            <line>Purpur</line>
+            <line></line>
+            <line>Transforms Amethyst lens parts</line>
+            <line>into Tephra lens parts during</line>
+            <line>day and into Regolith lens parts</line>
+            <line>during night when other</line>
+            <line>conditions are met. Check</line>
+            <line>'Transformations' chapter for</line>
+            <line>more information.</line>
+            <line></line>
+            <line>Purpur coating can be</line>
+            <line>crafted from 4 amethyst shards,</line>
+            <line>1 blue ice block and</line>
+            <line>4 purpur blocks.</line>
+            <line>#38#150#minecraft:amethyst_shard#minecraft:purpur_block#minecraft:amethyst_shard#minecraft:purpur_block#minecraft:blue_ice#minecraft:purpur_block#minecraft:amethyst_shard#minecraft:purpur_block#minecraft:amethyst_shard</line>
+         </right>
+      </page>
    </effects>
 
    <transformations>
       <page>
          <left>
-            <line>transforamtions left </line>
+            <line>Tephra lenses spread daytime</line>
+            <line>effects even during night.</line>
+            <line>During day Amethyst lenses with</line>
+            <line>Purpur coating will transform</line>
+            <line>Amethyst lens parts placed under</line>
+            <line>them into thier Tephra</line>
+            <line>counterparts. Transformation</line>
+            <line>happens only when parts are</line>
+            <line>placed on top of a magma block</line>
+            <line>and are above Y level 200.</line>
+            <line>@85@110@0@130@65@65@1.1</line>
          </left>
          <right>
-            <line>transformations right </line>
+            <line>Regolith lenses spread nighttime</line>
+            <line>effects even during day.</line>
+            <line>During night Amethyst lenses with</line>
+            <line>Purpur coating will transform</line>
+            <line>Amethyst lens parts placed under</line>
+            <line>them into thier Regolith</line>
+            <line>counterparts. Transformation</line>
+            <line>happens only when parts are</line>
+            <line>placed on top of a bedrock block</line>
+            <line>and are below Y level 0.</line>
+            <line>@-25@110@85@130@65@65@1.1</line>
          </right>
       </page>
    </transformations>
